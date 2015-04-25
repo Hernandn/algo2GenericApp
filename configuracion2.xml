@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application name="Copy Files">
+    <path>C:\Windows\system\copy.exe</path>
+    <window>
+        <label>Archivo Origen</label>
+        <fileInput id="fileFrom"></fileInput>
+        <label>Carpeta Destino</label>
+        <folderInput id="FileTo"></folderInput>
+        <label>Mantener Nombre Archivo</label>
+        <checkBox id="check"></checkBox>
+    </window>
+    <validation>
+        <check value=1>
+    </validation>
+</application>

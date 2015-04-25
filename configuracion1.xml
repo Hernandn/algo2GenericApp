@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application name="git">
+    <application name="commit">
+        <path>C:\git\git.exe</path>
+        <flag>commit<flag/>
+        <window>
+            <parameter>-m</parameter>
+            <label>Mensaje</label>
+            <textBox id="textMessage"></textBox>
+        </window>
+        <flag>-m -v</flag>
+        <validation>
+            <textMessage maxSize=30>
+        </validation>
+    </application>    
+</application>
