@@ -1,89 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application name="ipconfig">	<!--como ipconfig tiene un solo comando con varias flags, no uso el tag de command (SubApp) -->	
-	<start>ipconfig</start>
-	<window>
-		<head>
-		  <label>Ipconfig Diagnostic Utility for Network Connections</label>
-		</head>
-		<label>Parameters</label>
-		<list>	<!-- lista de elementos -->
-		  <li>	<!-- list item -->
-		    <radiobutton>(no flag)</radiobutton>	<!-- radio buttons para seleccionar uno de los flags posibles -->
-		  </li>
-		  <li>
-		    <radiobutton>/?</radiobutton>
-		    <parameter>
-		      <flag>/?</flag>
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/all</radiobutton>
-		    <parameter>
-		      <flag>/?</flag>
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/renew</radiobutton>
-		    <parameter>
-		      <flag>/renew</flag>
-		      <label>Adapter (optional)</label>
-		      <textBox id="adapter1"></textBox>		<!-- agregar un parametro despues del flag (en este caso puede o no estar) -->
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/release</radiobutton>
-		    <parameter>
-		      <flag>/release</flag>
-		      <label>Adapter (optional)</label>
-		      <textBox id="adapter2"></textBox>
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/flushdns</radiobutton>
-		    <parameter>
-		      <flag>/flushdns</flag>
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/displaydns</radiobutton>
-		    <parameter>
-		      <flag>/displaydns</flag>
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/registerdns</radiobutton>
-		    <parameter>
-		      <flag>/registerdns</flag>
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/showclassid</radiobutton>
-		    <parameter>
-		      <flag>/showclassid</flag>
-		      <label>Adapter</label>
-		      <textBox id="adapter3"></textBox>
-		    </parameter>
-		  </li>
-		  <li>
-		    <radiobutton>/setclassid</radiobutton>
-		    <parameter>
-		      <flag>/setclassid</flag>
-		      <label>Adapter</label>
-		      <textBox id="adapter4"></textBox>
-		      <label>Class ID</label>
-		      <textBox id="classid"></textBox>
-		    </parameter>
-		  </li>
-		</list>
-		<button>Execute</button>
-	</window>
-  <validation>
-      <textBox id="adapter1" maxSize=30 />
-      <textBox id="adapter2" maxSize=30 />
-      <textBox id="adapter3" maxSize=30 />
-      <textBox id="adapter4" maxSize=30 />
-      <textBox id="classid" maxSize=30 />
-  </validation>
+<application name="ipconfig">
+	
+	<command name="ipconfig con RadioButton">
+		<start>ipconfig</start>
+		<window>
+			<head>
+				<label>Ipconfig Diagnostic Utility for Network Connections</label>
+			</head>
+			<label>Parameters</label>
+			<list>	<!-- lista de elementos -->
+				<li>	<!-- list item -->
+					<radiobutton>(no flag)</radiobutton>	<!-- radio buttons para seleccionar uno de los flags posibles -->
+				</li>
+				<li>
+					<radiobutton>/?</radiobutton>
+					<parameter>
+						<flag>/?</flag>
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/all</radiobutton>
+					<parameter>
+						<flag>/all</flag>
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/renew</radiobutton>
+					<parameter>
+						<flag>/renew</flag>
+						<label>Adapter (optional)</label>
+						<textBox id="adapter1"></textBox>		<!-- agregar un parametro despues del flag (en este caso puede o no estar) -->
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/release</radiobutton>
+					<parameter>
+						<flag>/release</flag>
+						<label>Adapter (optional)</label>
+						<textBox id="adapter2"></textBox>
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/flushdns</radiobutton>
+					<parameter>
+						<flag>/flushdns</flag>
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/displaydns</radiobutton>
+					<parameter>
+						<flag>/displaydns</flag>
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/registerdns</radiobutton>
+					<parameter>
+						<flag>/registerdns</flag>
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/showclassid</radiobutton>
+					<parameter>
+						<flag>/showclassid</flag>
+						<label>Adapter</label>
+						<textBox id="adapter3"></textBox>
+					</parameter>
+				</li>
+				<li>
+					<radiobutton>/setclassid</radiobutton>
+					<parameter>
+						<flag>/setclassid</flag>
+						<label>Adapter</label>
+						<textBox id="adapter4"></textBox>
+						<label>Class ID</label>
+						<textBox id="classid"></textBox>
+					</parameter>
+				</li>
+			</list>
+			<button>Execute</button>
+		</window>
+		<validation>
+			<textBox id="adapter1" maxSize=30 />
+			<textBox id="adapter2" maxSize=30 />
+			<textBox id="adapter3" maxSize=30 />
+			<textBox id="adapter4" maxSize=30 />
+			<textBox id="classid" maxSize=30 />
+		</validation>
+	</command>
+	
+	<command name="ipconfig con ComboBox">
+		<start>ipconfig</start>
+		<window>
+			<head>
+				<label>Ipconfig Diagnostic Utility for Network Connections</label>
+			</head>
+			<label>Parameters</label>
+			<combobox>	<!-- Combo Box -->
+				<ci>	<!-- Combo item -->
+					<clabel>(no flag)</clabel>	<!-- label del item del combo box -->
+				</ci>
+				<ci>
+					<clabel>/?</clabel>
+					<parameter>
+						<flag>/?</flag>
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/all</clabel>
+					<parameter>
+						<flag>/all</flag>
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/renew</clabel>
+					<parameter>
+						<flag>/renew</flag>
+						<label>Adapter (optional)</label>
+						<textBox id="adapter1"></textBox>		<!-- agregar un parametro despues del flag (en este caso puede o no estar) -->
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/release</clabel>
+					<parameter>
+						<flag>/release</flag>
+						<label>Adapter (optional)</label>
+						<textBox id="adapter2"></textBox>
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/flushdns</clabel>
+					<parameter>
+						<flag>/flushdns</flag>
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/displaydns</clabel>
+					<parameter>
+						<flag>/displaydns</flag>
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/registerdns</clabel>
+					<parameter>
+						<flag>/registerdns</flag>
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/showclassid</clabel>
+					<parameter>
+						<flag>/showclassid</flag>
+						<label>Adapter</label>
+						<textBox id="adapter3"></textBox>
+					</parameter>
+				</ci>
+				<ci>
+					<clabel>/setclassid</clabel>
+					<parameter>
+						<flag>/setclassid</flag>
+						<label>Adapter</label>
+						<textBox id="adapter4"></textBox>
+						<label>Class ID</label>
+						<textBox id="classid"></textBox>
+					</parameter>
+				</ci>
+			</combobox>
+			<button>Execute</button>
+		</window>
+		<validation>
+			<textBox id="adapter1" maxSize=30 />
+			<textBox id="adapter2" maxSize=30 />
+			<textBox id="adapter3" maxSize=30 />
+			<textBox id="adapter4" maxSize=30 />
+			<textBox id="classid" maxSize=30 />
+		</validation>
+	</command>
+
 </application>
 
 <!-- SYNTAX -->
