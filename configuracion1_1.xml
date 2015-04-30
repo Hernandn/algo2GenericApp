@@ -8,11 +8,11 @@
 			<label>Git application to do a commit</label>
 			<label>Parameters</label>
 			<parameter>		<!-- asi se pueden agregar todos los parametros que sean necesarios -->
-				<label>Mensaje</label>
+				<label>Message</label>
 				<flag>-m</flag>
 				<textBox id="textMessage"></textBox>
 			</parameter>
-			<button>Ejecutar</button>
+			<button>Execute</button>
 		</window>
 		<flag>-a -v</flag>
         <validation>
