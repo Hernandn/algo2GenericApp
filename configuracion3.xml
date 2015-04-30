@@ -6,11 +6,11 @@
 		  <label>Ipconfig Diagnostic Utility for Network Connections</label>
 		</head>
 		<label>Parameters</label>
-		<list>
-		  <li>
-		    <radiobutton>(no flag)</radiobutton>
+		<list>	<!-- lista de elementos -->
+		  <li>	<!-- list item -->
+		    <radiobutton>(no flag)</radiobutton>	<!-- radio buttons para seleccionar uno de los flags posibles -->
 		  </li>
-      <li>
+		  <li>
 		    <radiobutton>/?</radiobutton>
 		    <parameter>
 		      <flag>/?</flag>
@@ -27,7 +27,7 @@
 		    <parameter>
 		      <flag>/renew</flag>
 		      <label>Adapter (optional)</label>
-		      <textBox id="adapter1"></textBox>
+		      <textBox id="adapter1"></textBox>		<!-- agregar un parametro despues del flag (en este caso puede o no estar) -->
 		    </parameter>
 		  </li>
 		  <li>
@@ -78,7 +78,11 @@
 		<button>Execute</button>
 	</window>
   <validation>
-      <textBox id="textMessage" maxSize=30 />		<!-- me parecio mejor hacerlo asi por un tema de reducir la cantidad de tags, diganme si esta mal -->
+      <textBox id="adapter1" maxSize=30 />
+      <textBox id="adapter2" maxSize=30 />
+      <textBox id="adapter3" maxSize=30 />
+      <textBox id="adapter4" maxSize=30 />
+      <textBox id="classid" maxSize=30 />
   </validation>
 </application>
 
