@@ -1,1 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application name="ipconfig">	<!--como ipconfig tiene un solo comando con varias flags, no uso el tag de command (SubApp) -->	
+	<start>ipconfig</start>
+	<window>
+		<head>
+		  <label>Ipconfig Diagnostic Utility for Network Connections</label>
+		</head>
+		<label>Parameters</label>
+		<list>
+		  <li>
+		    <radiobutton>(no flag)</radiobutton>
+		  </li>
+      <li>
+		    <radiobutton>/?</radiobutton>
+		    <parameter>
+		      <flag>/?</flag>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/all</radiobutton>
+		    <parameter>
+		      <flag>/?</flag>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/renew</radiobutton>
+		    <parameter>
+		      <flag>/renew</flag>
+		      <label>Adapter (optional)</label>
+		      <textBox id="adapter1"></textBox>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/release</radiobutton>
+		    <parameter>
+		      <flag>/release</flag>
+		      <label>Adapter (optional)</label>
+		      <textBox id="adapter2"></textBox>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/flushdns</radiobutton>
+		    <parameter>
+		      <flag>/flushdns</flag>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/displaydns</radiobutton>
+		    <parameter>
+		      <flag>/displaydns</flag>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/registerdns</radiobutton>
+		    <parameter>
+		      <flag>/registerdns</flag>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/showclassid</radiobutton>
+		    <parameter>
+		      <flag>/showclassid</flag>
+		      <label>Adapter</label>
+		      <textBox id="adapter3"></textBox>
+		    </parameter>
+		  </li>
+		  <li>
+		    <radiobutton>/setclassid</radiobutton>
+		    <parameter>
+		      <flag>/setclassid</flag>
+		      <label>Adapter</label>
+		      <textBox id="adapter4"></textBox>
+		      <label>Class ID</label>
+		      <textBox id="classid"></textBox>
+		    </parameter>
+		  </li>
+		</list>
+		<button>Execute</button>
+	</window>
+  <validation>
+      <textBox id="textMessage" maxSize=30 />		<!-- me parecio mejor hacerlo asi por un tema de reducir la cantidad de tags, diganme si esta mal -->
+  </validation>
+</application>
 
+<!-- SYNTAX -->
+<!-- ipconfig [/? | /all | /renew adapter | /release adapter | /flushdns | /displaydns | /registerdns | /showclassid adapter | /setclassid adapter classid ] -->
