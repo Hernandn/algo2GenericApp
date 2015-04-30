@@ -5,7 +5,9 @@
 		<start>git</start>	<!-- Comienzo del comando -->
 		<flag>commit<flag/>
 		<window>
-			<label>Git application to do a commit</label>
+			<head>		<!-- Titulo de la aplicacion, escrito arriba con otro formato de heading -->
+				<label>Git application to do a commit</label>
+			</head>
 			<label>Parameters</label>
 			<parameter>		<!-- asi se pueden agregar todos los parametros que sean necesarios -->
 				<label>Message</label>
