@@ -2,7 +2,7 @@
 <application name="git">		<!-- Podemos hacer un comboBox que contenga todos los application name. -->
     <command name="commit">		<!-- SubApplication: una vez elegida la aplicacion, se elige la subApp dentro de otro comboBox -->
         <!-- <path>C:\git\git.exe</path> /se necesita el path? por ejemplo con copy o xcopy, el comando se puede ejecutar desde cualquier path me parece-->
-		<start>git</start>
+		<start>git</start>	<!-- Comienzo del comando -->
 		<flag>commit<flag/>
 		<window>
 			<label>Git application to do a commit</label>
