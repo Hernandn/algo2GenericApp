@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<applications> <!-- varias aplicaciones en un xml -->
+
+    <application name="Git Commit" exePath="c:/git.exe"> <!-- nombre y ejecutable de la app como atributos -->
+        
+        <inputs> <!-- conjunto de inputs -->
+
+            <input id="lbl" name="Label1" type="label">Git commit!</input> <!-- el nombre del input nos da su label si es que lo lleva -->
+            <input id="param" name="Parámetro" type="hidden">commit</input> <!-- el tipo nos dice a qué componente de swing se corresponde -->
+            <input id="m" name="-m" type="checkbox"></input><!-- el valor dentro de los tags nos da el value del input. Si es vacío quiere decir que está en blanco o que es un flag, todo depende del type-->
+
+        </inputs>
+
+        <validations> <!-- conjunto de validaciones -->
+
+            <validation inputId="m" nullable="false"/> <!-- se asocian a un input por el id -->
+            <validation inputId="a" nullable="true"/> <!-- hay varios atributos que se pueden llenar como nullable o maxVal, etc -->
+            <validation inputId="b" maxVal="10" minVal="1" numeric="true"/> <!-- los atributos no indicados deben tener configurado un default -->
+
+        </validations>
+
+    </application>
+
+</applications>
