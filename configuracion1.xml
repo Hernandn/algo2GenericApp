@@ -3,12 +3,15 @@
     <application name="commit">
         <path>C:\git\git.exe</path>
         <flag>commit<flag/>
+        <parameter>
+            <flag>-m</flag>
+            <id>textMessage</id>
+        </parameter>
         <window>
-            <parameter>-m</parameter>
             <label>Mensaje</label>
             <textBox id="textMessage"></textBox>
         </window>
-        <flag>-m -v</flag>
+        <flag>-v</flag>
         <validation>
             <textMessage maxSize=30>
         </validation>
