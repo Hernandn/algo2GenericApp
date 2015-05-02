@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application name="git">
-    <application name="commit">
-        <path>C:\git\git.exe</path>
-        <flag>commit<flag/>
-        <parameter>
-            <flag>-m</flag>
-            <id>textMessage</id>
-        </parameter>
+    <application name="commit" exePath="C:\git\git.exe">
+        <parameters>
+            <parameter>
+                <flag>commit<flag/>
+            </parameter>
+            <parameter>
+                <flag>-m</flag>
+                <id>textMessage</id>                
+            </parameter>
+        </parameters>
         <window>
+            <head>
+                <label>Git application to do a commit</label>
+            </head>
             <label>Mensaje</label>
             <textBox id="textMessage"></textBox>
         </window>
-        <flag>-v</flag>
         <validation>
-            <textMessage maxSize=30>
+            <textBox id="textMessage" maxSize=30 />
         </validation>
     </application>    
 </application>

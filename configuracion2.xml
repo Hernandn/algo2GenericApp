@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application name="Copy Files">
-    <path>C:\Windows\system\copy.exe</path>
+<application name="Copy Files" exePath="C:\Windows\system\copy.exe">
+    <parameters>
+        <parameter>
+            <flag></flag>
+            <id>fileFrom</id>
+        </parameter>
+        <parameter>
+            <flag></flag>
+            <id>FileTo</id>
+        </parameter>
+    <parameters>
     <window>
+        <head>
+            <label>Application to Copy Files</label>
+        </head>
         <label>Archivo Origen</label>
         <fileInput id="fileFrom"></fileInput>
         <label>Carpeta Destino</label>
