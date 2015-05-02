@@ -9,19 +9,18 @@
             <flag></flag>
             <id>FileTo</id>
         </parameter>
-    <parameters>
+    </parameters>
     <window>
         <head>
             <label>Application to Copy Files</label>
         </head>
         <label>Archivo Origen</label>
-        <fileInput id="fileFrom"></fileInput>
+        <fileInput id="fileFrom" type="file"></fileInput>
         <label>Carpeta Destino</label>
-        <folderInput id="FileTo"></folderInput>
-        <label>Mantener Nombre Archivo</label>
-        <checkBox id="check"></checkBox>
+        <folderInput id="FileTo" type="directory"></folderInput>
     </window>
     <validation>
-        <check value=1>
+        <fileInput id="fileFrom" exists="true"></fileInput>
+        <fileInput id="FileTo" exists="false"></fileInput>
     </validation>
 </application>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application name="git">
-    <application name="commit" exePath="C:\git\git.exe">
+<application name="git" exePath="C:\git\git.exe">
+    <application name="commit">
         <parameters>
             <parameter>
-                <flag>commit<flag/>
+                <flag>commit</flag>
             </parameter>
             <parameter>
                 <flag>-m</flag>
-                <id>textMessage</id>                
+                <id>textMessage</id>              
             </parameter>
         </parameters>
         <window>
@@ -18,7 +18,7 @@
             <textBox id="textMessage"></textBox>
         </window>
         <validation>
-            <textBox id="textMessage" maxSize=30 />
+            <textBox id="textMessage" maxSize="30"/>
         </validation>
     </application>    
 </application>
