@@ -15,10 +15,16 @@
 			<head>
 				<label>Application to Copy a File to a folder</label>
 			</head>
-			<label>Archivo Origen</label>
-			<fileInput id="fileFrom" type="file"></fileInput>
-			<label>Carpeta Destino</label>
-			<folderInput id="folderTo" type="directory"></folderInput>
+			<list>
+				<item>
+					<label>Archivo Origen</label>
+					<fileInput id="fileFrom" type="file"></fileInput>
+				</item>
+				<item>
+					<label>Carpeta Destino</label>
+					<folderInput id="folderTo" type="directory"></folderInput>
+				</item>
+			</list>
 		</window>
 		<validation>
 			<fileInput id="fileFrom" exists="true"></fileInput>	<!-- tiene que existir el archivo -->
@@ -41,10 +47,16 @@
 			<head>
 				<label>Application to Copy Files from a folder to another folder</label>
 			</head>
-			<label>Carpeta Origen</label>
-			<folderInput id="folderFrom" type="directory"></folderInput>
-			<label>Carpeta Destino</label>
-			<folderInput id="folderTo" type="directory"></folderInput>
+			<list>
+				<item>
+					<label>Carpeta Origen</label>
+					<folderInput id="folderFrom" type="directory"></folderInput>
+				</item>
+				<item>
+					<label>Carpeta Destino</label>
+					<folderInput id="folderTo" type="directory"></folderInput>
+				</item>
+			</list>
 		</window>
 		<validation>
 			<folderInput id="folderFrom" exists="true"></folderInput>
@@ -63,35 +75,36 @@
 			<head>
 				<label>Ipconfig Diagnostic Utility for Network Connections</label>
 			</head>
-			<item>
-				<label>Modifier</label>
-				<comboBox id="modifier">
-					<comboBoxItem tag="Command Help" value="/?"></comboBoxItem>
-					<comboBoxItem tag="/all" value="/all"></comboBoxItem>
-					<comboBoxItem tag="/renew" value="/renew">
-						<label>Adapter (optional)</label>
-						<textBox id="adapter1"></textBox>
-					</comboBoxItem>
-					<comboBoxItem tag="/release" value="/release">
-						<label>Adapter (optional)</label>
-						<textBox id="adapter1"></textBox>
-					</comboBoxItem>
-					<comboBoxItem tag="/flushdns" value="/flushdns"></comboBoxItem>
-					<comboBoxItem tag="/displaydns" value="/displaydns"></comboBoxItem>
-					<comboBoxItem tag="/registerdns" value="/registerdns"></comboBoxItem>
-					<comboBoxItem tag="/showclassid" value="/showclassid">
-						<label>Adapter</label>
-						<textBox id="adapter2"></textBox>
-					</comboBoxItem>
-					<comboBoxItem tag="/setclassid" value="/setclassid">
-						<label>Adapter</label>
-						<textBox id="adapter2"></textBox>
-						<label>Class ID</label>
-						<textBox id="classId"></textBox>
-					</comboBoxItem>
-				</comboBox>
-			</item>
-
+			<list>
+				<item>
+					<label>Modifier</label>
+					<comboBox id="modifier">
+						<comboBoxItem tag="Command Help" flag="/?"></comboBoxItem>
+						<comboBoxItem tag="/all" flag="/all"></comboBoxItem>
+						<comboBoxItem tag="/renew" flag="/renew">
+							<label>Adapter (optional)</label>
+							<textBox id="adapter1"></textBox>
+						</comboBoxItem>
+						<comboBoxItem tag="/release" flag="/release">
+							<label>Adapter (optional)</label>
+							<textBox id="adapter1"></textBox>
+						</comboBoxItem>
+						<comboBoxItem tag="/flushdns" flag="/flushdns"></comboBoxItem>
+						<comboBoxItem tag="/displaydns" flag="/displaydns"></comboBoxItem>
+						<comboBoxItem tag="/registerdns" flag="/registerdns"></comboBoxItem>
+						<comboBoxItem tag="/showclassid" flag="/showclassid">
+							<label>Adapter</label>
+							<textBox id="adapter2"></textBox>
+						</comboBoxItem>
+						<comboBoxItem tag="/setclassid" flag="/setclassid">
+							<label>Adapter</label>
+							<textBox id="adapter2"></textBox>
+							<label>Class ID</label>
+							<textBox id="classId"></textBox>
+						</comboBoxItem>
+					</comboBox>
+				</item>
+			</list>
 		</window>
 		<validation>
 			<textBox id="adapter1" maxSize="50" nullable="true"></textBox>
