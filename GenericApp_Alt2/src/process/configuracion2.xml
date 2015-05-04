@@ -51,5 +51,53 @@
 			<fileInput id="folderTo" exists="true"></fileInput> 
 		</validation>
 	</application>
+	
+	<application name="Ipconfig" exePath="" command="ipconfig">
+		<parameters>
+			<parameter>
+				<flag></flag>
+				<id>modifier</id>
+			</parameter>
+		</parameters>
+		<window>
+			<head>
+				<label>Ipconfig Diagnostic Utility for Network Connections</label>
+			</head>
+			<item>
+				<label>Modifier</label>
+				<comboBox id="modifier">
+					<comboBoxItem tag="Command Help" value="/?"></comboBoxItem>
+					<comboBoxItem tag="/all" value="/all"></comboBoxItem>
+					<comboBoxItem tag="/renew" value="/renew">
+						<label>Adapter (optional)</label>
+						<textBox id="adapter1"></textBox>
+					</comboBoxItem>
+					<comboBoxItem tag="/release" value="/release">
+						<label>Adapter (optional)</label>
+						<textBox id="adapter1"></textBox>
+					</comboBoxItem>
+					<comboBoxItem tag="/flushdns" value="/flushdns"></comboBoxItem>
+					<comboBoxItem tag="/displaydns" value="/displaydns"></comboBoxItem>
+					<comboBoxItem tag="/registerdns" value="/registerdns"></comboBoxItem>
+					<comboBoxItem tag="/showclassid" value="/showclassid">
+						<label>Adapter</label>
+						<textBox id="adapter2"></textBox>
+					</comboBoxItem>
+					<comboBoxItem tag="/setclassid" value="/setclassid">
+						<label>Adapter</label>
+						<textBox id="adapter2"></textBox>
+						<label>Class ID</label>
+						<textBox id="classId"></textBox>
+					</comboBoxItem>
+				</comboBox>
+			</item>
+
+		</window>
+		<validation>
+			<textBox id="adapter1" maxSize="50" nullable="true"></textBox>
+			<textBox id="adapter2" maxSize="50" nullable="false"></textBox>
+			<textBox id="classId" maxSize="50" nullable="false"></textBox>
+		</validation>
+	</application>
 </applications>
 
