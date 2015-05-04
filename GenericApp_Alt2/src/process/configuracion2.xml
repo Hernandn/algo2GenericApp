@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <applications>
-	<application name="Copy File to a Folder" exePath="" command="copy">	<!-- completar el path a utilizar o el comando solo -->
+	<application name="Copy File to a Folder" exePath="" command="copy">
 		<parameters>
 			<parameter>
 				<flag></flag>
@@ -27,12 +27,12 @@
 			</list>
 		</window>
 		<validation>
-			<fileInput id="fileFrom" exists="true"></fileInput>	<!-- tiene que existir el archivo -->
-			<fileInput id="folderTo" exists="true"></fileInput>	<!-- tiene que existir la carpeta destino -->
+			<fileInput id="fileFrom" exists="true"></fileInput>
+			<fileInput id="folderTo" exists="true"></fileInput>
 		</validation>
 	</application>
 
-	<application name="Copy files to a Folder" exePath="" command="xcopy">
+	<application name="Copy files to a Folder" exePath="C:\Windows\System32\xcopy.exe" command="">
 		<parameters>
 			<parameter>
 				<flag></flag>
@@ -82,25 +82,43 @@
 						<comboBoxItem tag="Command Help" flag="/?"></comboBoxItem>
 						<comboBoxItem tag="/all" flag="/all"></comboBoxItem>
 						<comboBoxItem tag="/renew" flag="/renew">
-							<label>Adapter (optional)</label>
-							<textBox id="adapter1"></textBox>
+							<list>
+								<item>
+									<label>Adapter (optional)</label>
+									<textBox id="adapter1"></textBox>
+								</item>
+							</list>
 						</comboBoxItem>
 						<comboBoxItem tag="/release" flag="/release">
-							<label>Adapter (optional)</label>
-							<textBox id="adapter1"></textBox>
+							<list>
+								<item>
+									<label>Adapter (optional)</label>
+									<textBox id="adapter2"></textBox>
+								</item>
+							</list>
 						</comboBoxItem>
 						<comboBoxItem tag="/flushdns" flag="/flushdns"></comboBoxItem>
 						<comboBoxItem tag="/displaydns" flag="/displaydns"></comboBoxItem>
 						<comboBoxItem tag="/registerdns" flag="/registerdns"></comboBoxItem>
 						<comboBoxItem tag="/showclassid" flag="/showclassid">
-							<label>Adapter</label>
-							<textBox id="adapter2"></textBox>
+							<list>
+								<item>
+									<label>Adapter</label>
+									<textBox id="adapter3"></textBox>
+								</item>
+							</list>
 						</comboBoxItem>
 						<comboBoxItem tag="/setclassid" flag="/setclassid">
-							<label>Adapter</label>
-							<textBox id="adapter2"></textBox>
-							<label>Class ID</label>
-							<textBox id="classId"></textBox>
+							<list>
+								<item>
+									<label>Adapter</label>
+									<textBox id="adapter4"></textBox>
+								</item>
+								<item>
+									<label>Class ID</label>
+									<textBox id="classId"></textBox>
+								</item>
+							</list>
 						</comboBoxItem>
 					</comboBox>
 				</item>
@@ -108,7 +126,9 @@
 		</window>
 		<validation>
 			<textBox id="adapter1" maxSize="50" nullable="true"></textBox>
-			<textBox id="adapter2" maxSize="50" nullable="false"></textBox>
+			<textBox id="adapter2" maxSize="50" nullable="true"></textBox>
+			<textBox id="adapter3" maxSize="50" nullable="false"></textBox>
+			<textBox id="adapter4" maxSize="50" nullable="false"></textBox>
 			<textBox id="classId" maxSize="50" nullable="false"></textBox>
 		</validation>
 	</application>
