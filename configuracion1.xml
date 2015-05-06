@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application name="git" exePath="C:\git\git.exe">
-    <application name="commit">
+<applications>
+    <application name="git" exePath="C:\git\git.exe" command="">
         <parameters>
             <parameter>
                 <flag>commit</flag>
+            </parameter>
+            <parameter>
+                <flag>-a</flag>
+                <id>checkBox</id>
+            </parameter>
+            <parameter>
+                <flag>--date</flag>
+                <id>dateCommit</id>              
             </parameter>
             <parameter>
                 <flag>-m</flag>
@@ -14,11 +22,23 @@
             <head>
                 <label>Git application to do a commit</label>
             </head>
-            <label>Mensaje</label>
-            <textBox id="textMessage"></textBox>
+            <list>
+                <item>
+                    <label>Add all tracked Files</label>
+                    <checkBox id="checkBox"></checkBox>
+                </item>
+                <item>
+                    <label>Dia de Commit</label>
+                    <dateTimePicker id="dateCommit"></dateTimePicker>
+                </item>
+                <item>
+                    <label>Mensaje</label>
+                    <textBox id="textMessage"></textBox>
+                </item>
+            </list>            
         </window>
         <validation>
-            <textBox id="textMessage" maxSize="30"/>
+            <textBox id="textMessage" maxSize="30" nullable="false"></textBox>
         </validation>
     </application>    
-</application>
+</applications>
