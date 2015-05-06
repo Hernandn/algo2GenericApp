@@ -24,6 +24,8 @@ public class XMLProcess
 		fullCommand = "";
 		System.out.println("Filename = " + filename);
 		System.out.println("XML Process creado");
+		//parse the xml file and get the dom object
+		parseXmlFile();
 	}
 	
 	private void parseXmlFile()
@@ -56,25 +58,31 @@ public class XMLProcess
 		}
 	}
 	
-	private void parseDocument()
+	private void parseDocument(int appNum)
 	{
 		NodeList nodeList;
-		Element singleElement;
+		Element element,singleElement;
 		String text;
 		
-		//get the root elememt
-		Element element = document.getDocumentElement();
-		text = element.getAttribute("exePath");
-		//text = singleElement.getAttribute("exePath");
-		fullCommand += text + " ";
-		//get the application name
-		nodeList = element.getElementsByTagName("application");
-		
+		nodeList = document.getElementsByTagName("application");
 		if(nodeList == null)
 		{
 			System.out.println("[ERROR] - No puede no tener tag application");
 			return;
 		}
+		//get the application
+		element = (Element)nodeList.item(appNum-1);
+		
+		//agrega el path (si no lo usa, agrega un string vacio)
+		text = element.getAttribute("exePath");
+		fullCommand += text;
+		//agrega el comando (idem anterior)
+		text = element.getAttribute("command");
+		fullCommand += text;
+
+		
+		
+		
 		
 		//get the application parameters
 		nodeList = element.getElementsByTagName("parameter");
@@ -86,10 +94,10 @@ public class XMLProcess
 				String flag = getTextValue(singleElement, "flag");
 				
 				if(!flag.equals(""))
-					fullCommand += flag + " ";
+					fullCommand += " " + flag;
 				
 				text = getTextValue(singleElement, "id");
-				fullCommand += "{" + text + "} ";
+				fullCommand += " " + text;
 			}
 		}
 	}
@@ -113,22 +121,39 @@ public class XMLProcess
 		return textVal;
 	}
 	
-	
-	public void run() 
+	//obtener listado (en string) de aplicaciones para ejecutar
+	public String getListApps()
 	{
-		//parse the xml file and get the dom object
-		parseXmlFile();
+		Element element;
+		NodeList nodeList = document.getElementsByTagName("application");
+		String output = "";
+		for(int i = 0 ; i < nodeList.getLength();i++) 
+		{	
+			element = (Element)nodeList.item(i);
+			String appName = element.getAttribute("name");
+			output += (i+1) + ") " + appName + "\n";
+		}
+		return output;
+	}
+	
+	public void run(int appNum) 
+	{
 		//get each employee element and create a Employee object
-		parseDocument();
+		parseDocument(appNum);
 		//printData();
 		System.out.println(fullCommand);
 	}
 	
+	public String getFullCommand()
+	{
+		return fullCommand;
+	}
+	
 	public static void main(String[] args){
 		//create an instance
-		XMLProcess xmlProcess = new XMLProcess("../configuracion2.xml");
+		//XMLProcess xmlProcess = new XMLProcess("../GenericApp/src/process/configuracion2.xml");
 		
 		//call run
-		xmlProcess.run();
+		//xmlProcess.run();
 	}
 }

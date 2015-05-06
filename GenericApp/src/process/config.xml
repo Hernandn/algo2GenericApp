@@ -132,5 +132,62 @@
 			<textBox id="classId" maxSize="50" nullable="false"></textBox>
 		</validation>
 	</application>
+	
+	<application name="git" exePath="C:\git\git.exe" command="">
+        <parameters>
+            <parameter>
+                <flag>commit</flag>
+            </parameter>
+            <parameter>
+                <flag>--date=</flag>
+                <id>dateCommit</id>              
+            </parameter>
+            <parameter>
+                <flag>-m</flag>
+                <id>textMessage</id>              
+            </parameter>
+			<parameter>
+                <flag></flag>
+                <id>files</id>
+            </parameter>
+        </parameters>
+        <window>
+            <head>
+                <label>Git application to do a commit</label>
+            </head>
+            <list>
+                <item>
+                    <label>Add all tracked Files</label>
+                    <checkBox id="allFiles">-a</checkBox>
+                </item>
+                <item>
+                    <label>Commit Date</label>
+                    <dateTimePicker id="dateCommit"></dateTimePicker>
+                </item>
+                <item>
+                    <label>Message</label>
+                    <textBox id="textMessage"></textBox>
+                </item>
+				<item>
+					<label>Files</label>
+					<radioButton id="files">
+						<radioButtonItem tag="All files" flag="-a"></radioButtonItem>
+						<radioButtonItem tag="Choose file" flag="">
+							<list>
+								<item>
+									<label></label>
+									<fileInput id="files" type="file"></fileInput>
+								</item>
+							</list>
+						</radioButtonItem>
+					</radioButton>
+				</item>
+            </list>            
+        </window>
+        <validation>
+            <textBox id="textMessage" maxSize="30" nullable="false"></textBox>
+			<fileInput id="files" exists="true"></fileInput>
+        </validation>
+    </application>
 </applications>
 
