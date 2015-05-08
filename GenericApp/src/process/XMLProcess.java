@@ -1,6 +1,7 @@
 package process;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -9,7 +10,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
 import org.xml.sax.SAXException;
 
 public class XMLProcess 
@@ -134,6 +134,22 @@ public class XMLProcess
 			output += (i+1) + ") " + appName + "\n";
 		}
 		return output;
+	}
+	
+	//Redefinicion de getListApps()
+	public HashSet<String> getListApps(int number)
+	{
+		Element element;
+		NodeList nodeList = document.getElementsByTagName("application");
+		HashSet<String> collection = new HashSet<String> ();
+		for(int i = 0 ; i < nodeList.getLength();i++) 
+		{	
+			element = (Element)nodeList.item(i);
+			String appName = element.getAttribute("name");
+			//output += (i+1) + ") " + appName + "\n";
+			collection.add(appName);
+		}
+		return collection;
 	}
 	
 	public void run(int appNum) 
