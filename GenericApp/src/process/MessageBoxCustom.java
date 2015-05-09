@@ -9,10 +9,23 @@ import org.eclipse.swt.widgets.Shell;
 
 public class MessageBoxCustom 
 {
+	public static Display display;
+	public static Shell shell;
+	
+	public MessageBoxCustom(Shell parentShell, Display parentDisplay)
+	{
+		display = parentDisplay;
+		shell = parentShell;
+	}
+	
 	public static void main(String[] args)
 	{
-		MessageBoxError("¿Qué estás haciendo?");	
-				
+		Display display = new Display();
+		Shell shell = new Shell(display);
+		
+		MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
+		messageBoxCustom.MessageBoxError("¿Qué estás haciendo?");	
+		
 		int respuesta = MessageBoxOptions("Pregunta", "¿Seguro?");
 		if (respuesta == 0)
 			System.out.println("Respuesta fue si");
@@ -22,10 +35,9 @@ public class MessageBoxCustom
 		return;
 	}
 	
-	public static void MessageBoxError(String message)
+	public void MessageBoxError(String message)
 	{
-		Display display = new Display();
-		Shell shell = new Shell(display);
+
 		int style = SWT.ICON_ERROR;
 		
 		MessageBox messageBox = new MessageBox(shell, style);
