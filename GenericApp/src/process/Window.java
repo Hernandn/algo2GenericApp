@@ -1,8 +1,5 @@
 package process;
 
-import java.util.HashSet;
-
-
 public class Window 
 {
 	public static void main(String[] args) 
@@ -10,9 +7,10 @@ public class Window
         printMessage("Hello World!");
         printMessage("Hola Mundo!");
         XMLProcess xmlProcess = new XMLProcess("src/process/config.xml");
-		HashSet<String> lista = xmlProcess.getListApps(1);
+		//HashSet<String> lista = xmlProcess.getListApps(1);
 		
-		MainWindow mainWindow = new MainWindow(lista);
+		//MainWindow mainWindow = new MainWindow(xmlProcess);
+		MainWindow mainWindow = new MainWindow(xmlProcess);
     }
 
     public static void printMessage(String message)

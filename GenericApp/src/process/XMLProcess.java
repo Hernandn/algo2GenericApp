@@ -1,7 +1,7 @@
 package process;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -80,10 +80,6 @@ public class XMLProcess
 		text = element.getAttribute("command");
 		fullCommand += text;
 
-		
-		
-		
-		
 		//get the application parameters
 		nodeList = element.getElementsByTagName("parameter");
 		if(nodeList != null && nodeList.getLength() > 0) 
@@ -102,7 +98,56 @@ public class XMLProcess
 		}
 	}
 	
-	private String getTextValue(Element element, String tagName) 
+	public NodeList getWindowElement(int appNum)
+	{
+		NodeList nodeList;
+		Element element;
+		
+		System.out.println("getWindowElement(" + appNum + ")");
+		nodeList = document.getElementsByTagName("application");
+		if(nodeList == null)
+		{
+			System.out.println("[ERROR] - No puede no tener tag application");
+			return null;
+		}
+		//get the application
+		element = (Element)nodeList.item(appNum);
+		nodeList = element.getElementsByTagName("window");
+		
+		if(nodeList == null)
+		{
+			System.out.println("[ERROR] - No puede no tener tag window");
+			return null;
+		}
+		
+		//text = element.getAttribute("command");
+		//System.out.println("Text = " + text);
+		
+		return nodeList;
+		//		Element element;
+//		NodeList nodeList;
+//		
+//		System.out.println("getWindowElement()");
+//		System.out.println("appNum = " + appNum);
+//		
+//		nodeList = document.getElementsByTagName("application");
+//		if(nodeList == null)
+//		{
+//			System.out.println("[ERROR] - No puede no tener tag application");
+//			return null;
+//		}
+//		//get the application
+//		System.out.println("1");
+//		element = (Element)nodeList.item(appNum);
+//		System.out.println("2");
+//		System.out.println(element.getAttribute("exePath"));
+		
+		
+		//agrega el path (si no lo usa, agrega un string vacio)
+		//return element.getElementsByTagName("window");
+	}
+	
+	public String getTextValue(Element element, String tagName) 
 	{
 		String textVal = null;
 		NodeList nodeList = element.getElementsByTagName(tagName);
@@ -137,15 +182,18 @@ public class XMLProcess
 	}
 	
 	//Redefinicion de getListApps()
-	public HashSet<String> getListApps(int number)
+	//public HashSet<String> getListApps(int number)
+	public ArrayList<String> getListApps(int number)
 	{
 		Element element;
 		NodeList nodeList = document.getElementsByTagName("application");
-		HashSet<String> collection = new HashSet<String> ();
+		//HashSet<String> collection = new HashSet<String> ();
+		ArrayList<String> collection = new ArrayList<String>();
 		for(int i = 0 ; i < nodeList.getLength();i++) 
 		{	
 			element = (Element)nodeList.item(i);
 			String appName = element.getAttribute("name");
+			//System.out.println("Appname = " + appName);
 			//output += (i+1) + ") " + appName + "\n";
 			collection.add(appName);
 		}

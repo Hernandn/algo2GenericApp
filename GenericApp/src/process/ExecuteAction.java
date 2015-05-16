@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Listener;
 
 public class ExecuteAction implements Listener{
 
-	public MainWindow mainWindow; 
+	public MainWindow mainWindow;
 	
 	public void setMainWindow(MainWindow parent)
 	{
@@ -16,13 +16,14 @@ public class ExecuteAction implements Listener{
 	@Override
 	public void handleEvent(Event event) 
 	{
-		System.out.println("Button pressed = " + event.type);
 		switch (event.type) 
         {
         	case SWT.Selection:
         		mainWindow.shell.setVisible(false);
-	          	MessageBoxCustom messageBoxCustom = new MessageBoxCustom(mainWindow.shell, mainWindow.display);
-	          	messageBoxCustom.MessageBoxError("Qué estas haciendo?");
+	          	//MessageBoxCustom messageBoxCustom = new MessageBoxCustom(mainWindow.shell, mainWindow.display);
+	          	//messageBoxCustom.MessageBoxError("Qué estas haciendo?");
+        		ApplicationWindow applicationWindow = new ApplicationWindow(mainWindow);
+        		applicationWindow.run(mainWindow.optionSelected, mainWindow.xmlProcess);
         		break;
         }
 		
