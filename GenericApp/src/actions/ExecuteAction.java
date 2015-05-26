@@ -1,8 +1,11 @@
-package process;
+package actions;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+
+import process.ApplicationWindow;
+import process.MainWindow;
 
 public class ExecuteAction implements Listener{
 

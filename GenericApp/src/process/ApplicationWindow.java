@@ -54,6 +54,8 @@ public class ApplicationWindow
 
 		System.out.println("Run " + option);
 		nodeList = xmlprocess.getWindowElement(option);
+		System.out.println("nodeList = " + nodeList.getLength());
+		
 		
 		showWindow();
 		
@@ -98,9 +100,7 @@ public class ApplicationWindow
 	    
 	    Label label = new Label(shell, SWT.NULL);
 		label.setText(getApplicationName());
-		
-		// TODO: Pensar como pasar esto a una funcion
-		
+
 	    shell.pack();
 		shell.open();
 		//textUser.forceFocus();

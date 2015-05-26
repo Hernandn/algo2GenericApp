@@ -1,193 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <applications>
-	<application name="Copy File to a Folder" exePath="" command="copy">
-		<parameters>
-			<parameter>
-				<flag></flag>
-				<id>fileFrom</id>
-			</parameter>
-			<parameter>
-				<flag></flag>
-				<id>folderTo</id>
-			</parameter>
-		</parameters>
-		<window>
-			<head>
-				<label>Application to Copy a File to a folder</label>
-			</head>
-			<list>
-				<item>
-					<label>Archivo Origen</label>
-					<fileInput id="fileFrom" type="file"></fileInput>
-				</item>
-				<item>
-					<label>Carpeta Destino</label>
-					<folderInput id="folderTo" type="directory"></folderInput>
-				</item>
-			</list>
-		</window>
-		<validation>
-			<fileInput id="fileFrom" exists="true"></fileInput>
-			<fileInput id="folderTo" exists="true"></fileInput>
-		</validation>
-	</application>
-
 	<application name="Copy files to a Folder" exePath="C:\Windows\System32\xcopy.exe" command="">
-		<parameters>
-			<parameter>
-				<flag></flag>
-				<id>folderFrom</id>
-			</parameter>
-			<parameter>
-				<flag></flag>
-				<id>folderTo</id>
-			</parameter>
-		</parameters>
-		<window>
-			<head>
-				<label>Application to Copy Files from a folder to another folder</label>
-			</head>
-			<list>
-				<item>
-					<label>Carpeta Origen</label>
-					<folderInput id="folderFrom" type="directory"></folderInput>
-				</item>
-				<item>
-					<label>Carpeta Destino</label>
-					<folderInput id="folderTo" type="directory"></folderInput>
-				</item>
-			</list>
-		</window>
-		<validation>
-			<folderInput id="folderFrom" exists="true"></folderInput>
-			<fileInput id="folderTo" exists="true"></fileInput> 
-		</validation>
+		<head>
+			<label>Application to Copy Files from a folder to another folder</label>
+		</head>
+		<parameter>
+			<label>Carpeta Origen</label>
+			<flag></flag>
+			<folderInput type="directory"></folderInput>
+			<validation exists="true"></validation>
+		</parameter>
+		<parameter>
+			<label>Carpeta Destino</label>
+			<flag></flag>
+			<folderInput type="directory"></folderInput>
+			<validation exists="true"></validation>
+		</parameter>
 	</application>
 	
 	<application name="Ipconfig" exePath="" command="ipconfig">
-		<parameters>
-			<parameter>
-				<flag></flag>
-				<id>modifier</id>
-			</parameter>
-		</parameters>
-		<window>
-			<head>
-				<label>Ipconfig Diagnostic Utility for Network Connections</label>
-			</head>
-			<list>
-				<item>
-					<label>Modifier</label>
-					<comboBox id="modifier">
-						<comboBoxItem tag="Command Help" flag="/?"></comboBoxItem>
-						<comboBoxItem tag="/all" flag="/all"></comboBoxItem>
-						<comboBoxItem tag="/renew" flag="/renew">
-							<list>
-								<item>
-									<label>Adapter (optional)</label>
-									<textBox id="adapter1"></textBox>
-								</item>
-							</list>
-						</comboBoxItem>
-						<comboBoxItem tag="/release" flag="/release">
-							<list>
-								<item>
-									<label>Adapter (optional)</label>
-									<textBox id="adapter2"></textBox>
-								</item>
-							</list>
-						</comboBoxItem>
-						<comboBoxItem tag="/flushdns" flag="/flushdns"></comboBoxItem>
-						<comboBoxItem tag="/displaydns" flag="/displaydns"></comboBoxItem>
-						<comboBoxItem tag="/registerdns" flag="/registerdns"></comboBoxItem>
-						<comboBoxItem tag="/showclassid" flag="/showclassid">
-							<list>
-								<item>
-									<label>Adapter</label>
-									<textBox id="adapter3"></textBox>
-								</item>
-							</list>
-						</comboBoxItem>
-						<comboBoxItem tag="/setclassid" flag="/setclassid">
-							<list>
-								<item>
-									<label>Adapter</label>
-									<textBox id="adapter4"></textBox>
-								</item>
-								<item>
-									<label>Class ID</label>
-									<textBox id="classId"></textBox>
-								</item>
-							</list>
-						</comboBoxItem>
-					</comboBox>
-				</item>
-			</list>
-		</window>
-		<validation>
-			<textBox id="adapter1" maxSize="50" nullable="true"></textBox>
-			<textBox id="adapter2" maxSize="50" nullable="true"></textBox>
-			<textBox id="adapter3" maxSize="50" nullable="false"></textBox>
-			<textBox id="adapter4" maxSize="50" nullable="false"></textBox>
-			<textBox id="classId" maxSize="50" nullable="false"></textBox>
-		</validation>
+		<head>
+			<label>Ipconfig Diagnostic Utility for Network Connections</label>
+		</head>
+		<parameter>
+			<label>Modifier</label>
+			<flag></flag>
+			<comboBox>
+				<comboBoxItem tag="Command Help" flag="/?"></comboBoxItem>
+				<comboBoxItem tag="/all" flag="/all"></comboBoxItem>
+				<comboBoxItem tag="/renew" flag="/renew">
+					<ifSelected>
+						<item>
+							<label>Adapter (optional)</label>
+							<textBox></textBox>
+							<validation maxSize="50" nullable="true"></validation>
+						</item>
+					</ifSelected>
+				</comboBoxItem>
+				<comboBoxItem tag="/release" flag="/release">
+					<ifSelected>
+						<item>
+							<label>Adapter (optional)</label>
+							<textBox></textBox>
+							<validation maxSize="50" nullable="true"></validation>
+						</item>
+					</ifSelected>
+				</comboBoxItem>
+				<comboBoxItem tag="/flushdns" flag="/flushdns"></comboBoxItem>
+				<comboBoxItem tag="/displaydns" flag="/displaydns"></comboBoxItem>
+				<comboBoxItem tag="/registerdns" flag="/registerdns"></comboBoxItem>
+				<comboBoxItem tag="/showclassid" flag="/showclassid">
+					<ifSelected>
+						<item>
+							<label>Adapter</label>
+							<textBox></textBox>
+							<validation maxSize="50" nullable="false"></validation>
+						</item>
+					</ifSelected>
+				</comboBoxItem>
+				<comboBoxItem tag="/setclassid" flag="/setclassid">
+					<ifSelected>
+						<item>
+							<label>Adapter</label>
+							<textBox></textBox>
+							<validation maxSize="50" nullable="false"></validation>
+						</item>
+						<item>
+							<label>Class ID</label>
+							<textBox></textBox>
+							<validation maxSize="50" nullable="false"></validation>
+						</item>
+					</ifSelected>
+				</comboBoxItem>
+			</comboBox>
+		</parameter>
 	</application>
 	
 	<application name="git" exePath="C:\git\git.exe" command="">
-        <parameters>
-            <parameter>
-                <flag>commit</flag>
-            </parameter>
-            <parameter>
-                <flag>--date=</flag>
-                <id>dateCommit</id>              
-            </parameter>
-            <parameter>
-                <flag>-m</flag>
-                <id>textMessage</id>              
-            </parameter>
-			<parameter>
-                <flag></flag>
-                <id>files</id>
-            </parameter>
-        </parameters>
-        <window>
-            <head>
-                <label>Git application to do a commit</label>
-            </head>
-            <list>
-                <item>
-                    <label>Add all tracked Files</label>
-                    <checkBox id="allFiles">-a</checkBox>
-                </item>
-                <item>
-                    <label>Commit Date</label>
-                    <dateTimePicker id="dateCommit"></dateTimePicker>
-                </item>
-                <item>
-                    <label>Message</label>
-                    <textBox id="textMessage"></textBox>
-                </item>
-				<item>
-					<label>Files</label>
-					<radioButton id="files">
-						<radioButtonItem tag="All files" flag="-a"></radioButtonItem>
-						<radioButtonItem tag="Choose file" flag="">
-							<list>
-								<item>
-									<label></label>
-									<fileInput id="files" type="file"></fileInput>
-								</item>
-							</list>
-						</radioButtonItem>
-					</radioButton>
-				</item>
-            </list>            
-        </window>
-        <validation>
-            <textBox id="textMessage" maxSize="30" nullable="false"></textBox>
-			<fileInput id="files" exists="true"></fileInput>
-        </validation>
+		<parameter>
+			<label></label>
+			<flag>commit</flag>
+			<validation></validation>
+		</parameter>
+		<parameter>
+			<label>Add all tracked Files</label>
+			<flag></flag>
+            <checkBox flag="-a"></checkBox>
+            <validation></validation>
+		</parameter>
+		<parameter>
+			<label>Commit Date</label>
+			<flag>--date=</flag>
+			<dateTimePicker format="yyyy-MM-dd"></dateTimePicker>
+			<validation></validation>
+		</parameter>
+		<parameter>
+			<label>Message</label>
+			<flag>-m</flag>
+			<textBox></textBox>
+			<validation maxSize="30" nullable="false"></validation>            
+		</parameter>
+		<parameter>
+			<label>Files</label>
+			<flag></flag>
+			<radioButton id="files">
+				<radioButtonItem tag="All files" flag="-a"></radioButtonItem>
+				<radioButtonItem tag="Choose file" flag="">
+					<ifSelected>
+						<item>
+							<label></label>
+							<fileInput type="file"></fileInput>
+							<validation exists="true"></validation>
+						</item>
+					</ifSelected>
+				</radioButtonItem>
+			</radioButton>
+			<validation></validation>
+		</parameter>
     </application>
+    
 </applications>
-

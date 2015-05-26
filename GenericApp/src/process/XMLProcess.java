@@ -12,6 +12,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import process.Parametro.inputs;
+
 public class XMLProcess 
 {
 	public String filename;
@@ -56,6 +58,101 @@ public class XMLProcess
 		{
 			ioe.printStackTrace();
 		}
+	}
+	
+	public ArrayList<Aplicacion> parseDocument()
+	{
+		Element element;
+		NodeList nodeList;
+		NodeList nodeList_Parameters;
+		NodeList nodeList_Aplication = document.getElementsByTagName("application");
+		Parametro parametro;
+		
+		if(nodeList_Aplication == null)
+		{
+			System.out.println("[ERROR] - No puede no tener tag application");
+			return null;
+		}
+		
+		ArrayList<Aplicacion> aplicaciones = new ArrayList<Aplicacion>();
+		
+		for(int i = 0 ; i < nodeList_Aplication.getLength();i++) 
+		{	
+			element = (Element)nodeList_Aplication.item(i);
+			String appName = element.getAttribute("name");
+			String exePath = element.getAttribute("exePath");
+			String command = element.getAttribute("command");
+			
+			Aplicacion app = new Aplicacion(appName);
+			app.SetCommand(command);
+			app.SetExePath(exePath);
+			
+			nodeList_Parameters = element.getElementsByTagName("parameter"); 
+			
+			if(nodeList_Parameters == null)
+			{
+				System.out.println("[ERROR] - No puede no tener tag parameter");
+				return null;
+			}
+
+			for(int j = 0 ; j < nodeList_Parameters.getLength();j++) 
+			{	
+				element = (Element)nodeList_Parameters.item(j);
+				String flag = getTextValue(element, "flag");
+				String label = getTextValue(element, "label");
+				
+				
+				nodeList = element.getElementsByTagName("folderInput");
+				if(nodeList != null && nodeList.getLength() > 0) 
+				{
+					parametro = new Parametro(label, flag, inputs.folderInput);
+					app.agregarParametro(parametro);
+					continue;
+				}
+				
+				nodeList = element.getElementsByTagName("fileInput");
+				if(nodeList != null && nodeList.getLength() > 0) 
+				{
+					parametro = new Parametro(label, flag, inputs.fileInput);
+					app.agregarParametro(parametro);
+					continue;
+				}
+				
+				nodeList = element.getElementsByTagName("comboBox");
+				
+				if(nodeList != null && nodeList.getLength() > 0) 
+				{
+					parametro = new Parametro(label, flag, inputs.comboBox);
+					app.agregarParametro(parametro);
+					continue;
+				}
+				
+				nodeList = element.getElementsByTagName("checkBox");
+				
+				if(nodeList != null && nodeList.getLength() > 0) 
+				{
+					parametro = new Parametro(label, flag, inputs.checkBox);
+					app.agregarParametro(parametro);
+					continue;
+				}
+				
+				nodeList = element.getElementsByTagName("dateTimePicker");
+				
+				if(nodeList != null && nodeList.getLength() > 0) 
+				{
+					parametro = new Parametro(label, flag, inputs.dateTimePicker);
+					app.agregarParametro(parametro);
+					continue;
+				}
+			}
+			
+			aplicaciones.add(app);
+		}
+		
+		
+		
+		return aplicaciones;
+		
 	}
 	
 	private void parseDocument(int appNum)
@@ -110,20 +207,27 @@ public class XMLProcess
 			System.out.println("[ERROR] - No puede no tener tag application");
 			return null;
 		}
-		//get the application
-		element = (Element)nodeList.item(appNum);
-		nodeList = element.getElementsByTagName("window");
 		
-		if(nodeList == null)
+		element = (Element)nodeList.item(appNum);
+
+		
+		
+		//get the application
+		//element = (Element)nodeList.item(appNum);
+		//nodeList = element.getElementsByTagName("window");
+		
+		return (NodeList) nodeList.item(appNum);
+		
+		/*if(nodeList == null)
 		{
 			System.out.println("[ERROR] - No puede no tener tag window");
 			return null;
-		}
+		}*/
 		
 		//text = element.getAttribute("command");
 		//System.out.println("Text = " + text);
 		
-		return nodeList;
+		//return nodeList;
 		//		Element element;
 //		NodeList nodeList;
 //		
@@ -213,11 +317,4 @@ public class XMLProcess
 		return fullCommand;
 	}
 	
-	public static void main(String[] args){
-		//create an instance
-		//XMLProcess xmlProcess = new XMLProcess("../GenericApp/src/process/configuracion2.xml");
-		
-		//call run
-		//xmlProcess.run();
-	}
 }
