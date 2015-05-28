@@ -15,66 +15,20 @@ public class ApplicationWindow
 	public NodeList nodeList;
 	public static Display display;
 	public static Shell shell;
-	public static MainWindow mainWindow;
+	public static Aplicacion actualApplication;
 	
-	public ApplicationWindow(MainWindow parent)
+	
+	public ApplicationWindow(Display actualDisplay, Aplicacion app)
 	{
-		mainWindow = parent;
-		display = mainWindow.display;
+		actualApplication = app;
+		display = actualDisplay;
 //		shell = mainWindow.shell;
 	}
 	
-	public String getApplicationName()
+	public void run()
 	{
-		Element singleElement;
-		String head = "";
-		//i = 0 tiene que ser el Head
-		singleElement = (Element)nodeList.item(0);
-		
-		NodeList singleNodeList = singleElement.getElementsByTagName("label");
-		if(singleNodeList != null && singleNodeList.getLength() > 0) 
-		{
-			Element el = (Element)singleNodeList.item(0);
-			try
-			{
-				head = el.getFirstChild().getNodeValue();
-			}
-			catch(NullPointerException e)
-			{
-				System.out.println("[ERROR] - NullPointerException on ApplicationWindow::getApplicationName");
-			}
-		}
-		
-		System.out.println("head = " + head);
-		return head;
-	}
-	
-	public void run(int option, XMLProcess xmlprocess)
-	{
-
-		System.out.println("Run " + option);
-		nodeList = xmlprocess.getWindowElement(option);
-		System.out.println("nodeList = " + nodeList.getLength());
-		
-		
+		System.out.println("ApplicationWindow.run()");
 		showWindow();
-		
-		if(nodeList != null && nodeList.getLength() > 0) 
-		{
-			for(int i = 1 ; i < nodeList.getLength();i++) 
-			{	
-				//String head = xmlprocess.getTextValue(singleElement, "head");
-				//System.out.println("head = " + head);
-				
-//				if(!flag.equals(""))
-//					fullCommand += " " + flag;
-//				
-//				text = getTextValue(singleElement, "id");
-//				fullCommand += " " + text;
-			}
-		}
-		
-
 	}
 	
 	public void showWindow()
@@ -96,10 +50,10 @@ public class ApplicationWindow
 	    int y = bounds.y + (bounds.height - rect.height) / 2;
 	    shell.setLocation(x, y);
 	    
-	    shell.setText(mainWindow.combo.getItem(mainWindow.optionSelected));
+	    shell.setText(actualApplication.name);
 	    
 	    Label label = new Label(shell, SWT.NULL);
-		label.setText(getApplicationName());
+		label.setText(actualApplication.description);
 
 	    shell.pack();
 		shell.open();

@@ -18,7 +18,7 @@ public class ExecuteCMD
 	public static void main(String[] args)
 	{
 		//create an instance
-		XMLProcess xmlProcess = new XMLProcess("../GenericApp/src/process/configuracion2.xml");
+		XMLProcess xmlProcess = new XMLProcess("../GenericApp/src/process/config.xml");
 		Scanner scanner = new Scanner(System.in);
 		String id;
 		String flag;

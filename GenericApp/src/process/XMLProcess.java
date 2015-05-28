@@ -64,6 +64,7 @@ public class XMLProcess
 	{
 		Element element;
 		NodeList nodeList;
+		NodeList nodeList_Head;
 		NodeList nodeList_Parameters;
 		NodeList nodeList_Aplication = document.getElementsByTagName("application");
 		Parametro parametro;
@@ -87,6 +88,26 @@ public class XMLProcess
 			app.SetCommand(command);
 			app.SetExePath(exePath);
 			
+			nodeList_Head = element.getElementsByTagName("head");
+			if(nodeList_Head == null || nodeList_Head.getLength() > 1)
+			{
+				System.out.println("[ERROR] - No puede no tener tag head o tener más de uno");
+				return null;
+			}
+			
+			if(nodeList_Head.getLength() == 1)
+			{
+				Element el = (Element)nodeList_Head.item(0);
+				NodeList nodeList_label = el.getElementsByTagName("label");
+				el = (Element)nodeList_label.item(0);
+				String Description = el.getFirstChild().getNodeValue();
+				app.SetDescription(Description);
+			}
+			else
+			{
+				app.SetDescription("No description shown on XML File");
+			}
+
 			nodeList_Parameters = element.getElementsByTagName("parameter"); 
 			
 			if(nodeList_Parameters == null)

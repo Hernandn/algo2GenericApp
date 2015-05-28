@@ -25,8 +25,8 @@ public class ExecuteAction implements Listener{
         		mainWindow.shell.setVisible(false);
 	          	//MessageBoxCustom messageBoxCustom = new MessageBoxCustom(mainWindow.shell, mainWindow.display);
 	          	//messageBoxCustom.MessageBoxError("Qué estas haciendo?");
-        		ApplicationWindow applicationWindow = new ApplicationWindow(mainWindow);
-        		applicationWindow.run(mainWindow.optionSelected, mainWindow.xmlProcess);
+        		ApplicationWindow applicationWindow = new ApplicationWindow(mainWindow.display, mainWindow.applicationSelected);
+        		applicationWindow.run();
         		break;
         }
 		
