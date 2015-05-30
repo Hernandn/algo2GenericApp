@@ -165,6 +165,15 @@ public class XMLProcess
 					app.agregarParametro(parametro);
 					continue;
 				}
+				
+				nodeList = element.getElementsByTagName("textBox");
+				
+				if(nodeList != null && nodeList.getLength() > 0) 
+				{
+					parametro = new Parametro(label, flag, inputs.textBox);
+					app.agregarParametro(parametro);
+					continue;
+				}
 			}
 			
 			aplicaciones.add(app);

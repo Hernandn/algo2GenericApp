@@ -8,7 +8,8 @@ public class Parametro
 		folderInput,
 		comboBox,
 		checkBox,
-		dateTimePicker
+		dateTimePicker,
+		textBox
 	} 
 	
 	public String label;
