@@ -16,7 +16,8 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import process.Parametro.inputs;
+import parametros.Parametro;
+import parametros.Parametro.inputs;
 
 public class ApplicationWindow 
 {
@@ -50,7 +51,7 @@ public class ApplicationWindow
 		shell.setLayout(gridLayout);
 		
 		// Este segmento se supone que centra el form a la pantalla
-		shell.setSize(200, 200);
+		shell.setSize(400, 200);
 		Monitor primary = display.getPrimaryMonitor();
 	    Rectangle bounds = primary.getBounds();
 	    Rectangle rect = shell.getBounds();
@@ -78,7 +79,17 @@ public class ApplicationWindow
 			aLabel.setText(parametro.label);
 			aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			if(parametro.inputType.equals(inputs.folderInput))
+			//para que el input complete la linea actual y quede cada parametro en una linea
+			GridData gridData2 = new GridData(GridData.FILL_HORIZONTAL);
+	        gridData2.horizontalSpan = 2;
+	        
+	        if(!parametro.tieneInput())
+	        {
+	        	System.out.println("Parametro sin input");
+	        	continue;
+	        }
+	        
+	        if(parametro.inputType.equals(inputs.folderInput))
 			{
 				final Text text = new Text(shell, SWT.PUSH);
 				text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -114,45 +125,65 @@ public class ApplicationWindow
 				continue;
 			}
 			
-			if(parametro.inputType.equals(inputs.textBox))
+			else if(parametro.inputType.equals(inputs.textBox))
 			{
 				Text text = new Text(shell, SWT.SINGLE);
+				text.setLayoutData(gridData2);
 				continue;
 			}
 			
-			if(parametro.inputType.equals(inputs.fileInput))
+			else if(parametro.inputType.equals(inputs.fileInput))
 			{
 				Text text = new Text(shell, SWT.SINGLE);
+				text.setLayoutData(gridData2);
 				System.out.println("Incorporar Widget para fileInput");
 				continue;
 			}
 			
-			if(parametro.inputType.equals(inputs.comboBox))
+			else if(parametro.inputType.equals(inputs.comboBox))
 			{
 				Text text = new Text(shell, SWT.SINGLE);
+				text.setLayoutData(gridData2);
 				System.out.println("Incorporar Widget para comboBox");
 				continue;
 			}
 			
-			if(parametro.inputType.equals(inputs.checkBox))
+			else if(parametro.inputType.equals(inputs.checkBox))
 			{
 				Text text = new Text(shell, SWT.SINGLE);
+				
+		        text.setLayoutData(gridData2);
 				System.out.println("Incorporar Widget para checkBox");
 				continue;
 			}
 			
-			if(parametro.inputType.equals(inputs.dateTimePicker))
+			else if(parametro.inputType.equals(inputs.dateTimePicker))
 			{
 				Text text = new Text(shell, SWT.SINGLE);
+				text.setLayoutData(gridData2);
 				System.out.println("Incorporar Widget para dateTimePicker");
 				continue;
 			}
 			
-			System.out.println("[ERROR] - No se reconoce el input.");
+			else if(parametro.inputType.equals(inputs.radioButton))
+			{
+				Text text = new Text(shell, SWT.SINGLE);
+				text.setLayoutData(gridData2);
+				System.out.println("Incorporar Widget para radioButton");
+				continue;
+			}
+			
+			else	//(parametro.inputType == null)
+			{
+				
+				continue;
+			}
+			//System.out.println("[ERROR] - No se reconoce el input.");
 		}
 		
 		GridData gridData_button = new GridData(GridData.END, GridData.CENTER, false, false);
 		gridData_button.horizontalSpan = 3;
+		
 		
 		
 		Button okBtn = new Button(shell, SWT.PUSH);

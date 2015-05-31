@@ -12,7 +12,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import process.Parametro.inputs;
+import parametros.ComboBoxItem;
+import parametros.Parametro;
+import parametros.ParametroCheckBox;
+import parametros.ParametroComboBox;
+import parametros.ParametroRadioButton;
+import parametros.RadioButtonItem;
+import parametros.Validation;
+import parametros.Parametro.inputs;
 
 public class XMLProcess 
 {
@@ -116,65 +123,7 @@ public class XMLProcess
 				return null;
 			}
 
-			for(int j = 0 ; j < nodeList_Parameters.getLength();j++) 
-			{	
-				element = (Element)nodeList_Parameters.item(j);
-				String flag = getTextValue(element, "flag");
-				String label = getTextValue(element, "label");
-				
-				
-				nodeList = element.getElementsByTagName("folderInput");
-				if(nodeList != null && nodeList.getLength() > 0) 
-				{
-					parametro = new Parametro(label, flag, inputs.folderInput);
-					app.agregarParametro(parametro);
-					continue;
-				}
-				
-				nodeList = element.getElementsByTagName("fileInput");
-				if(nodeList != null && nodeList.getLength() > 0) 
-				{
-					parametro = new Parametro(label, flag, inputs.fileInput);
-					app.agregarParametro(parametro);
-					continue;
-				}
-				
-				nodeList = element.getElementsByTagName("comboBox");
-				
-				if(nodeList != null && nodeList.getLength() > 0) 
-				{
-					parametro = new Parametro(label, flag, inputs.comboBox);
-					app.agregarParametro(parametro);
-					continue;
-				}
-				
-				nodeList = element.getElementsByTagName("checkBox");
-				
-				if(nodeList != null && nodeList.getLength() > 0) 
-				{
-					parametro = new Parametro(label, flag, inputs.checkBox);
-					app.agregarParametro(parametro);
-					continue;
-				}
-				
-				nodeList = element.getElementsByTagName("dateTimePicker");
-				
-				if(nodeList != null && nodeList.getLength() > 0) 
-				{
-					parametro = new Parametro(label, flag, inputs.dateTimePicker);
-					app.agregarParametro(parametro);
-					continue;
-				}
-				
-				nodeList = element.getElementsByTagName("textBox");
-				
-				if(nodeList != null && nodeList.getLength() > 0) 
-				{
-					parametro = new Parametro(label, flag, inputs.textBox);
-					app.agregarParametro(parametro);
-					continue;
-				}
-			}
+			parsearParametros(nodeList_Parameters,app);
 			
 			aplicaciones.add(app);
 		}
@@ -185,6 +134,165 @@ public class XMLProcess
 		
 	}
 	
+	private void parsearParametros(NodeList nodeList_Parameters, Aplicacion app)
+	{
+		Element element;
+		
+		for(int j = 0 ; j < nodeList_Parameters.getLength();j++) 
+		{	
+			element = (Element)nodeList_Parameters.item(j);
+			
+			Parametro parametro = getParametro(element);
+			app.agregarParametro(parametro);
+			
+		}
+	}
+	
+	public Parametro getParametro(Element element)
+	{
+		NodeList nodeList;
+		
+		String label = getTextValue(element, "label");
+		String flag = getTextValue(element, "flag");
+		
+		Validation validation = getValidation(element);
+		
+		nodeList = element.getElementsByTagName("folderInput");
+		if(nodeList != null && nodeList.getLength() > 0) 
+		{
+			Parametro parametro = new Parametro(label, flag, inputs.folderInput, validation);
+			return parametro;
+		}
+		
+		nodeList = element.getElementsByTagName("fileInput");
+		if(nodeList != null && nodeList.getLength() > 0) 
+		{
+			Parametro parametro = new Parametro(label, flag, inputs.fileInput, validation);
+			return parametro;
+		}
+		
+		nodeList = element.getElementsByTagName("comboBox");
+		if(nodeList != null && nodeList.getLength() > 0) 
+		{
+			ParametroComboBox parametro = new ParametroComboBox(label, flag, inputs.comboBox, validation);
+			Element elemAux = (Element) nodeList.item(0);	//obtengo el elemento <comboBox>
+			NodeList items = elemAux.getElementsByTagName("comboBoxItem");	//lista de <comboBoxItem>
+			for(int k=0 ; k < items.getLength() ; k++)
+			{
+				elemAux = (Element) items.item(k);			//cada <comboBoxItem> de la lista
+				String tag = getTextValue(elemAux, "tag");
+				String flag2 = getTextValue(elemAux, "flag");
+				ComboBoxItem cBItem = new ComboBoxItem(tag, flag2);
+				cBItem.addSubParametros(listaSubparametrosIfSelected(elemAux));	//agrega todos los subparametros en <ifSelected>
+				
+				parametro.addComboBoxItem(cBItem);
+			}
+			return parametro;
+		}
+		
+		nodeList = element.getElementsByTagName("checkBox");
+		
+		if(nodeList != null && nodeList.getLength() > 0) 
+		{
+			ParametroCheckBox parametro = new ParametroCheckBox(label, flag, inputs.checkBox, validation);
+			Element elemAux = (Element) nodeList.item(0);
+			parametro.addSubparametros(listaSubparametrosIfSelected(elemAux));
+			return parametro;
+		}
+		
+		nodeList = element.getElementsByTagName("radioButton");
+		
+		if(nodeList != null && nodeList.getLength() > 0) 
+		{
+			ParametroRadioButton parametro = new ParametroRadioButton(label, flag, inputs.radioButton, validation);
+			Element elemAux = (Element) nodeList.item(0);	//obtengo el elemento <radioButton>
+			NodeList items = elemAux.getElementsByTagName("radioButtonItem");	//lista de <radioButtonItem>
+			for(int k=0 ; k < items.getLength() ; k++)
+			{
+				elemAux = (Element) items.item(k);			//cada <radioButtonItem> de la lista
+				String tag = getTextValue(elemAux, "tag");
+				String flag2 = getTextValue(elemAux, "flag");
+				RadioButtonItem rbItem = new RadioButtonItem(tag, flag2);
+				rbItem.addSubParametros(listaSubparametrosIfSelected(elemAux));	//agrega todos los subparametros en <ifSelected>
+				
+				parametro.addRadioButtonItem(rbItem);
+			}
+			return parametro;
+		}
+		
+		nodeList = element.getElementsByTagName("dateTimePicker");
+		
+		if(nodeList != null && nodeList.getLength() > 0) 
+		{
+			Parametro parametro = new Parametro(label, flag, inputs.dateTimePicker, validation);
+			return parametro;
+		}
+		
+		nodeList = element.getElementsByTagName("textBox");
+		
+		if(nodeList != null && nodeList.getLength() > 0) 
+		{
+			Parametro parametro = new Parametro(label, flag, inputs.textBox, validation);
+			return parametro;
+		}
+		
+		//si no tiene un tag de input
+		Parametro parametro = new Parametro(label, flag, null, validation);
+		
+		return parametro;
+	}
+	
+	
+	public ArrayList<Parametro> listaSubparametrosIfSelected(Element elemAux)
+	{
+		ArrayList<Parametro> listaSubparametros = new ArrayList<Parametro>();
+		Element element = (Element) elemAux.getElementsByTagName("ifSelected").item(0);
+		if(element != null)	//si adentro del <comboBoxItem> hay un <ifSelected>
+		{
+			NodeList nodeList = element.getElementsByTagName("item");	//lista de <item>
+			for(int l=0 ; l < nodeList.getLength() ; l++ )
+			{
+				Parametro subParametro = getParametro((Element)nodeList.item(l));
+				listaSubparametros.add(subParametro);
+			}
+		}
+		return listaSubparametros;
+	}
+	
+	
+	private Validation getValidation(Element element)
+	{
+		Element elemAux = (Element) element.getElementsByTagName("validation").item(0);
+		Validation validation = new Validation();
+		String minSize = elemAux.getAttribute("minSize");
+		if(minSize.length()>0)
+		{
+			validation.setMinSize(Integer.parseInt(minSize));
+		}
+		String maxSize = elemAux.getAttribute("maxSize");
+		if(maxSize.length()>0)
+		{
+			validation.setMaxSize(Integer.parseInt(maxSize));
+		}
+		String nullable = elemAux.getAttribute("nullable");
+		if(nullable.length()>0)
+		{
+			validation.setNullable(Boolean.parseBoolean(nullable));
+		}
+		String numeric = elemAux.getAttribute("numeric");
+		if(numeric.length()>0)
+		{
+			validation.setNumeric(Boolean.parseBoolean(numeric));
+		}
+		String exists = elemAux.getAttribute("exists");
+		if(exists.length()>0)
+		{
+			validation.setExists(Boolean.parseBoolean(exists));
+		}
+		return validation;
+	}
+	
+	/*
 	private void parseDocument(int appNum)
 	{
 		NodeList nodeList;
@@ -279,7 +387,7 @@ public class XMLProcess
 		
 		//agrega el path (si no lo usa, agrega un string vacio)
 		//return element.getElementsByTagName("window");
-	}
+//	}
 	
 	public String getTextValue(Element element, String tagName) 
 	{
@@ -300,6 +408,7 @@ public class XMLProcess
 		return textVal;
 	}
 	
+	/*
 	//obtener listado (en string) de aplicaciones para ejecutar
 	public String getListApps()
 	{
@@ -313,8 +422,9 @@ public class XMLProcess
 			output += (i+1) + ") " + appName + "\n";
 		}
 		return output;
-	}
+	}*/
 	
+	/*
 	//Redefinicion de getListApps()
 	//public HashSet<String> getListApps(int number)
 	public ArrayList<String> getListApps(int number)
@@ -333,14 +443,16 @@ public class XMLProcess
 		}
 		return collection;
 	}
+	*/
 	
+	/*
 	public void run(int appNum) 
 	{
 		//get each employee element and create a Employee object
 		parseDocument(appNum);
 		//printData();
 		System.out.println(fullCommand);
-	}
+	}*/
 	
 	public String getFullCommand()
 	{

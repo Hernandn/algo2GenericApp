@@ -3,9 +3,9 @@ package test;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import parametros.Parametro;
 import process.Aplicacion;
 import process.MainWindow;
-import process.Parametro;
 import process.XMLProcess;
 
 public class test 

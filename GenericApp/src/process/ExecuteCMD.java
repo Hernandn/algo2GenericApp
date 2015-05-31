@@ -25,13 +25,13 @@ public class ExecuteCMD
 		int ini,fin; //indices
 				
 		System.out.println("\nListado de aplicaciones:");
-		System.out.println(xmlProcess.getListApps());
+		//System.out.println(xmlProcess.getListApps());		//comentado para que no de error
 		System.out.println("Ingrese una opcion: ");
 		int opcion=scanner.nextInt();
 		
 		System.out.println("\nComando:");
 		//call run
-		xmlProcess.run(opcion);
+		//xmlProcess.run(opcion);	//comentado para que no de error
 		
 		String command = xmlProcess.getFullCommand();
 

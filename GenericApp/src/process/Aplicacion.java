@@ -2,6 +2,8 @@ package process;
 
 import java.util.ArrayList;
 
+import parametros.Parametro;
+
 public class Aplicacion 
 {
 	public ArrayList<Parametro> parametros;
