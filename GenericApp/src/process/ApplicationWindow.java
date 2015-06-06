@@ -1,14 +1,20 @@
 package process;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+
+import listeners.ComboBoxItemListener;
+import log.Log;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -16,7 +22,9 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import parametros.ComboBoxItem;
 import parametros.Parametro;
+import parametros.ParametroComboBox;
 import parametros.Parametro.inputs;
 
 public class ApplicationWindow 
@@ -24,6 +32,7 @@ public class ApplicationWindow
 	public static Display display;
 	public static Shell shell;
 	public static Aplicacion actualApplication;
+	public static Button okBtn;
 	
 	
 	public ApplicationWindow(Display actualDisplay, Aplicacion app)
@@ -34,7 +43,6 @@ public class ApplicationWindow
 	
 	public void run()
 	{
-		System.out.println("ApplicationWindow.run()");
 		showWindow();
 	}
 	
@@ -68,6 +76,7 @@ public class ApplicationWindow
 	    Label label = new Label(shell, SWT.SINGLE);
 		label.setText(actualApplication.description);
 		label.setLayoutData(gridData);
+
 		
 		Iterator<Parametro> iterator_parametros;
 		iterator_parametros = actualApplication.parametros.iterator();
@@ -80,7 +89,7 @@ public class ApplicationWindow
 			aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 			//para que el input complete la linea actual y quede cada parametro en una linea
-			GridData gridData2 = new GridData(GridData.FILL_HORIZONTAL);
+			final GridData gridData2 = new GridData(GridData.FILL_HORIZONTAL);
 	        gridData2.horizontalSpan = 2;
 	        
 	        if(!parametro.tieneInput())
@@ -142,16 +151,92 @@ public class ApplicationWindow
 			
 			else if(parametro.inputType.equals(inputs.comboBox))
 			{
-				Text text = new Text(shell, SWT.SINGLE);
-				text.setLayoutData(gridData2);
-				System.out.println("Incorporar Widget para comboBox");
+				//Text text = new Text(shell, SWT.SINGLE);
+				final Combo combo = new Combo(shell, SWT.SINGLE);
+				combo.setLayoutData(gridData2);
+				ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
+				final ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
+				if(items.isEmpty())
+					Log.writeLogMessage(Log.ERROR, "No se inicializco correctamente el parametroComboBox");
+				
+				Iterator<ComboBoxItem> iterator_items;
+				iterator_items = items.iterator();
+				while (iterator_items.hasNext())
+				{
+					ComboBoxItem comboBoxItem = (ComboBoxItem) iterator_items.next();
+					combo.add(comboBoxItem.getTag());
+				}
+				
+				combo.addSelectionListener(new SelectionListener(){
+
+					@Override
+					public void widgetSelected(SelectionEvent e) 
+					{
+						Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
+						
+						Iterator<ComboBoxItem> iterator_items;
+						iterator_items = items.iterator();
+						while (iterator_items.hasNext())
+						{
+							ComboBoxItem comboBoxItem = (ComboBoxItem) iterator_items.next();
+							if(comboBoxItem.getTag().equals(combo.getText()))
+							{
+								
+								if(comboBoxItem.getSubParametros().size() > 0)
+								{
+									ArrayList<Parametro> subParametros = comboBoxItem.getSubParametros();
+									Iterator<Parametro> iterator_parametros;
+									iterator_parametros = subParametros.iterator();
+									
+									while (iterator_parametros.hasNext())
+									{
+										Parametro parametro = (Parametro) iterator_parametros.next();
+										Log.writeLogMessage(Log.DEBUG, "parametro.label = " + parametro.label);
+										
+										Label aLabel = new Label(shell, SWT.SINGLE);
+										aLabel.setText(parametro.label);
+										aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+					
+										Text text = new Text(shell, SWT.SINGLE);
+										text.setLayoutData(gridData2);
+										
+										Button ExecuteButton = okBtn;
+										GridData data = (GridData) ExecuteButton.getLayoutData();
+										ExecuteButton.dispose();
+										
+										GridData gridData_button = new GridData(GridData.END, GridData.CENTER, false, false);
+										gridData_button.horizontalSpan = 3;
+										
+										okBtn = new Button(shell, SWT.PUSH);
+										okBtn.setText("Execute");
+										okBtn.setLayoutData(gridData_button);
+										
+										shell.layout(false);
+										shell.pack();
+										shell.open();
+									}
+								}
+								break;
+							}
+								
+						}
+						
+						
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+						
+					}
+					
+				});
+				
 				continue;
 			}
 			
 			else if(parametro.inputType.equals(inputs.checkBox))
 			{
 				Text text = new Text(shell, SWT.SINGLE);
-				
 		        text.setLayoutData(gridData2);
 				System.out.println("Incorporar Widget para checkBox");
 				continue;
@@ -186,7 +271,7 @@ public class ApplicationWindow
 		
 		
 		
-		Button okBtn = new Button(shell, SWT.PUSH);
+		okBtn = new Button(shell, SWT.PUSH);
 		okBtn.setText("Execute");
 		okBtn.setLayoutData(gridData_button);
 

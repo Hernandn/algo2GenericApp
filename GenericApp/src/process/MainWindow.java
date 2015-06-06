@@ -1,13 +1,12 @@
 package process;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+
 import java.util.Iterator;
 
+import listeners.ComboApplicationListener;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -82,42 +81,10 @@ public class MainWindow
 			String appName = (String)iterator.next(); 
 			combo.add(appName);
 		}
-	
-		combo.addSelectionListener(new SelectionListener() 
-		{
-			public void widgetSelected(SelectionEvent e) 
-			{
-				Iterator<Aplicacion> iterator_app;
-				iterator_app = aplicaciones.iterator();
-				while (iterator_app.hasNext())
-				{
-					Aplicacion app = (Aplicacion) iterator_app.next();
-					String appName = app.name;
-					if(app.name.equals(combo.getItem(combo.getSelectionIndex())))
-					{
-						applicationSelected = app;
-					}
-				}
-				optionSelected = combo.getSelectionIndex();
-				System.out.println("Selected index: " + combo.getSelectionIndex() + ", selected item: " + combo.getItem(combo.getSelectionIndex()) + ", text content in the text field: " + combo.getText());
-			}
-			
-			public void widgetDefaultSelected(SelectionEvent e) 
-			{
-				System.out.println("Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
-				String text = combo.getText();
-				
-				if(combo.indexOf(text) < 0) 
-				{ 
-					// Not in the list yet. 
-					combo.add(text);
-					// Re-sort
-					String[] items = combo.getItems();
-					Arrays.sort(items);
-					combo.setItems(items);
-				}
-			}
-		});
+		
+		// Le cree una implementacion porque no soporto pasarle toda la especificacion de los metodos :D
+		ComboApplicationListener selectionListener = new ComboApplicationListener(this);
+		combo.addSelectionListener(selectionListener);
 		
 		GridData gridData_combo = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
 		GridData gridData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
