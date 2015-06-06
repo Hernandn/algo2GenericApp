@@ -29,15 +29,6 @@ public class test
 			System.out.println("app.exePath = " + app.exePath);
 			
 			System.out.println("app.parametros.size() = " + app.parametros.size());
-			
-			iterator_parametros = app.parametros.iterator();
-			while(iterator_parametros.hasNext())
-			{
-				Parametro parametro = (Parametro) iterator_parametros.next();
-				System.out.println("parametro.label = " + parametro.label);
-				System.out.println("parametro.flag = " + parametro.flag);
-				System.out.println("parametro.inputType = " + parametro.inputType);
-			}
 		}
 		
 		MainWindow mainWindow = new MainWindow(applications);
