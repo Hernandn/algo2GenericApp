@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -33,12 +34,14 @@ public class ApplicationWindow
 	public static Shell shell;
 	public static Aplicacion actualApplication;
 	public static Button okBtn;
+	public static Boolean restartWindowFlag;
 	
 	
 	public ApplicationWindow(Display actualDisplay, Aplicacion app)
 	{
 		actualApplication = app;
 		display = actualDisplay;
+		restartWindowFlag = false;
 	}
 	
 	public void run()
@@ -46,11 +49,12 @@ public class ApplicationWindow
 		showWindow();
 	}
 	
-	public void showWindow()
+	public void initializeWindow()
 	{
 		shell = new Shell(display, SWT.CLOSE | SWT.TITLE );
 		
 		//shell = new Shell(display);
+		final Boolean restartWindow = false;
 		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 3;
@@ -75,9 +79,45 @@ public class ApplicationWindow
 	    
 	    Label label = new Label(shell, SWT.SINGLE);
 		label.setText(actualApplication.description);
-		label.setLayoutData(gridData);
+		label.setLayoutData(gridData); 
+	}
+	
+	public void addExecuteButton()
+	{
+		GridData gridData_button = new GridData(GridData.END, GridData.CENTER, false, false);
+		gridData_button.horizontalSpan = 3;
 
-		
+		okBtn = new Button(shell, SWT.PUSH);
+		okBtn.setText("Execute");
+		okBtn.setLayoutData(gridData_button);
+	};
+	
+	public Combo getCombo(String itemSelected)
+	{
+		Control[] children = shell.getChildren();
+		Combo combo = null;
+	    for (int i = 0; i < children.length; i++) 
+	    {
+	      Control child = children[i];
+	      if(child instanceof Combo)
+	      {
+	    	  combo = (Combo) child;
+	    	  
+	    	  String[] items = combo.getItems();
+	    	  for(int j=0; j < items.length; j++)
+	    	  {
+	    		  if(items[j].equals(itemSelected))
+	    			  break;	    		
+	    	  }
+	    	  
+	    	  break;
+	      }
+	    }
+	    return combo;
+	}
+	
+	public void addParameters()
+	{
 		Iterator<Parametro> iterator_parametros;
 		iterator_parametros = actualApplication.parametros.iterator();
 		while(iterator_parametros.hasNext())
@@ -174,6 +214,12 @@ public class ApplicationWindow
 					{
 						Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
 						
+						String itemSelected = combo.getItem(combo.getSelectionIndex());
+						
+						Shell previousShell = shell;
+						initializeWindow();
+						addParameters();
+						
 						Iterator<ComboBoxItem> iterator_items;
 						iterator_items = items.iterator();
 						while (iterator_items.hasNext())
@@ -181,7 +227,6 @@ public class ApplicationWindow
 							ComboBoxItem comboBoxItem = (ComboBoxItem) iterator_items.next();
 							if(comboBoxItem.getTag().equals(combo.getText()))
 							{
-								
 								if(comboBoxItem.getSubParametros().size() > 0)
 								{
 									ArrayList<Parametro> subParametros = comboBoxItem.getSubParametros();
@@ -190,6 +235,7 @@ public class ApplicationWindow
 									
 									while (iterator_parametros.hasNext())
 									{
+								
 										Parametro parametro = (Parametro) iterator_parametros.next();
 										Log.writeLogMessage(Log.DEBUG, "parametro.label = " + parametro.label);
 										
@@ -200,28 +246,30 @@ public class ApplicationWindow
 										Text text = new Text(shell, SWT.SINGLE);
 										text.setLayoutData(gridData2);
 										
-										Button ExecuteButton = okBtn;
-										GridData data = (GridData) ExecuteButton.getLayoutData();
-										ExecuteButton.dispose();
 										
-										GridData gridData_button = new GridData(GridData.END, GridData.CENTER, false, false);
-										gridData_button.horizontalSpan = 3;
-										
-										okBtn = new Button(shell, SWT.PUSH);
-										okBtn.setText("Execute");
-										okBtn.setLayoutData(gridData_button);
-										
-										shell.layout(false);
-										shell.pack();
-										shell.open();
 									}
 								}
+								
+								Button ExecuteButton = okBtn;
+								GridData data = (GridData) ExecuteButton.getLayoutData();
+								ExecuteButton.dispose();
+								
+								addExecuteButton();
+								
+								Combo elCombo = getCombo(itemSelected);
+								if(elCombo == null)
+									Log.writeLogMessage(Log.ERROR, "No encontre el Combo, despues de reconstruir la pantalla");
+								
+								elCombo.setText(itemSelected);
+								shell.layout(false);
+								shell.pack();
+								shell.open();
+								
+								previousShell.dispose();
 								break;
 							}
 								
 						}
-						
-						
 					}
 
 					@Override
@@ -265,29 +313,29 @@ public class ApplicationWindow
 			}
 			//System.out.println("[ERROR] - No se reconoce el input.");
 		}
-		
-		GridData gridData_button = new GridData(GridData.END, GridData.CENTER, false, false);
-		gridData_button.horizontalSpan = 3;
-		
-		
-		
-		okBtn = new Button(shell, SWT.PUSH);
-		okBtn.setText("Execute");
-		okBtn.setLayoutData(gridData_button);
+	}
+	
+	public void showWindow()
+	{
+
+		initializeWindow();
+		addParameters();
+		addExecuteButton();
 
 	    shell.pack();
 		shell.open();
 		//textUser.forceFocus();
 		// Set up the event loop.
-		while (!shell.isDisposed()) 
+		while (!shell.isDisposed())
 		{
-			
+		
 			if (!display.readAndDispatch()) 
 			{
 				// If no more entries in event queue
 				display.sleep();
 			}
 		}
+		
 		display.dispose();
 	}
 }
