@@ -185,10 +185,10 @@ public class XMLProcess
 				
 				elemAux = (Element) items.item(k);			//cada <comboBoxItem> de la lista
 				String tag = elemAux.getAttribute("tag");
-				String flag2 = elemAux.getAttribute("flag2");
+				String flag2 = elemAux.getAttribute("flag");
 				
 				Log.writeLogMessage(Log.DEBUG, "tag = " + tag);
-				Log.writeLogMessage(Log.DEBUG, "flag2 = " + flag2);
+				Log.writeLogMessage(Log.DEBUG, "flag = " + flag2);
 				
 				ComboBoxItem cBItem = new ComboBoxItem(tag, flag2);
 				cBItem.addSubParametros(listaSubparametrosIfSelected(elemAux));	//agrega todos los subparametros en <ifSelected>
@@ -253,10 +253,11 @@ public class XMLProcess
 	
 	public ArrayList<Parametro> listaSubparametrosIfSelected(Element elemAux)
 	{
-		ArrayList<Parametro> listaSubparametros = new ArrayList<Parametro>();
+		ArrayList<Parametro> listaSubparametros = null;
 		Element element = (Element) elemAux.getElementsByTagName("ifSelected").item(0);
 		if(element != null)	//si adentro del <comboBoxItem> hay un <ifSelected>
 		{
+			listaSubparametros = new ArrayList<Parametro>();
 			NodeList nodeList = element.getElementsByTagName("item");	//lista de <item>
 			for(int l=0 ; l < nodeList.getLength() ; l++ )
 			{

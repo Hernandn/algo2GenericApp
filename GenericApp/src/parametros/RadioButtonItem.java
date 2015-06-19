@@ -17,7 +17,10 @@ public class RadioButtonItem
 	
 	public void addSubParametros(ArrayList<Parametro> parametros)
 	{
-		subParametros.addAll(parametros);
+		if(parametros != null)
+		{
+			subParametros.addAll(parametros);
+		}
 	}
 
 	

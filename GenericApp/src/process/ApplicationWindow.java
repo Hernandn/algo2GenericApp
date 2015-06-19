@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -123,20 +124,29 @@ public class ApplicationWindow
 		while(iterator_parametros.hasNext())
 		{
 			Parametro parametro = (Parametro) iterator_parametros.next();
-			
-			Label aLabel = new Label(shell, SWT.SINGLE);
-			aLabel.setText(parametro.label);
-			aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 			//para que el input complete la linea actual y quede cada parametro en una linea
 			final GridData gridData2 = new GridData(GridData.FILL_HORIZONTAL);
-	        gridData2.horizontalSpan = 2;
+	        gridData2.horizontalSpan = 3;
 	        
 	        if(!parametro.tieneInput())
 	        {
 	        	System.out.println("Parametro sin input");
 	        	continue;
 	        }
+	        
+	        //valido primero para el checkbox porque tiene el label "pegado"
+	        if(parametro.inputType.equals(inputs.checkBox))
+			{
+		        Button checkBox = new Button(shell, SWT.CHECK);
+		    	checkBox.setText(parametro.label);
+		    	checkBox.setLayoutData(gridData2);
+				continue;
+			}
+	        
+	        Label aLabel = new Label(shell, SWT.SINGLE);
+			aLabel.setText(parametro.label);
+			aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	        
 	        if(parametro.inputType.equals(inputs.folderInput))
 			{
@@ -282,19 +292,12 @@ public class ApplicationWindow
 				continue;
 			}
 			
-			else if(parametro.inputType.equals(inputs.checkBox))
-			{
-				Text text = new Text(shell, SWT.SINGLE);
-		        text.setLayoutData(gridData2);
-				System.out.println("Incorporar Widget para checkBox");
-				continue;
-			}
+			
 			
 			else if(parametro.inputType.equals(inputs.dateTimePicker))
 			{
-				Text text = new Text(shell, SWT.SINGLE);
-				text.setLayoutData(gridData2);
-				System.out.println("Incorporar Widget para dateTimePicker");
+				final DateTime calendar = new DateTime (shell, SWT.CALENDAR);
+				calendar.setLayoutData(gridData2);
 				continue;
 			}
 			
