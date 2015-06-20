@@ -19,10 +19,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 
 import parametros.ComboBoxItem;
 import parametros.Parametro;
@@ -35,15 +38,16 @@ public class ApplicationWindow
 	public static Shell shell;
 	public static Aplicacion actualApplication;
 	public static Button okBtn;
-	public static Boolean restartWindowFlag;
+	public static ArrayList<Widget> parametrosCargados;
 	
 	
 	public ApplicationWindow(Display actualDisplay, Aplicacion app)
 	{
 		actualApplication = app;
-		display = actualDisplay;
-		restartWindowFlag = false;
+		display = actualDisplay;	
+		parametrosCargados = new ArrayList<Widget>();
 	}
+	
 	
 	public void run()
 	{
@@ -55,7 +59,6 @@ public class ApplicationWindow
 		shell = new Shell(display, SWT.CLOSE | SWT.TITLE );
 		
 		//shell = new Shell(display);
-		final Boolean restartWindow = false;
 		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 3;
@@ -91,6 +94,51 @@ public class ApplicationWindow
 		okBtn = new Button(shell, SWT.PUSH);
 		okBtn.setText("Execute");
 		okBtn.setLayoutData(gridData_button);
+		okBtn.addListener(SWT.Selection, new Listener(){
+
+			@Override
+			public void handleEvent(Event event) 
+			{
+				String fullCommand = "";
+				
+				if(!actualApplication.exePath.equals(""))
+					fullCommand += actualApplication.exePath;
+				else
+					fullCommand += actualApplication.command;
+				
+				Iterator<Parametro> iterator_parametros;
+				iterator_parametros = actualApplication.parametros.iterator();
+				
+				while(iterator_parametros.hasNext())
+				{
+					Parametro parametro = (Parametro) iterator_parametros.next();
+					if(!parametro.tieneInput())
+			        {
+						fullCommand += " " + parametro.flag;
+			        	continue;
+			        }
+					
+					Control[] children = shell.getChildren();
+					
+					for (int i = 0; i < children.length; i++) 
+				    {
+						Control child = children[i];
+				      
+						if(parametro.inputType.equals(inputs.comboBox))
+						{
+							if(child instanceof Combo)
+							{
+								Combo combo = (Combo) child;
+								//TODO: Terminar logica para traer el flag que esta dentro del comboBoxItem
+								ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
+								fullCommand += " " + parametro.flag;
+								fullCommand += " " + combo.getText();
+							}
+						}
+				    }
+				}
+				Log.writeLogMessage(Log.INFO, fullCommand);
+			}});
 	};
 	
 	public Combo getCombo(String itemSelected)
@@ -110,8 +158,6 @@ public class ApplicationWindow
 	    		  if(items[j].equals(itemSelected))
 	    			  break;	    		
 	    	  }
-	    	  
-	    	  break;
 	      }
 	    }
 	    return combo;
@@ -119,6 +165,8 @@ public class ApplicationWindow
 	
 	public void addParameters()
 	{
+		 
+		
 		Iterator<Parametro> iterator_parametros;
 		iterator_parametros = actualApplication.parametros.iterator();
 		while(iterator_parametros.hasNext())
@@ -250,7 +298,6 @@ public class ApplicationWindow
 									
 									while (iterator_parametros.hasNext())
 									{
-								
 										Parametro parametro = (Parametro) iterator_parametros.next();
 										Log.writeLogMessage(Log.DEBUG, "parametro.label = " + parametro.label);
 										
@@ -260,8 +307,6 @@ public class ApplicationWindow
 					
 										Text text = new Text(shell, SWT.SINGLE);
 										text.setLayoutData(gridData2);
-										
-										
 									}
 								}
 								
@@ -310,16 +355,15 @@ public class ApplicationWindow
 			{
 				Text text = new Text(shell, SWT.SINGLE);
 				text.setLayoutData(gridData2);
-				System.out.println("Incorporar Widget para radioButton");
+				Log.writeLogMessage(Log.ERROR, "Incorporar Widget para radioButton");
 				continue;
 			}
-			
 			else	//(parametro.inputType == null)
 			{
-				
+				Log.writeLogMessage(Log.ERROR, "No se reconoce el input o el input es NULL");
 				continue;
 			}
-			//System.out.println("[ERROR] - No se reconoce el input.");
+	        
 		}
 	}
 	
