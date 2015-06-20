@@ -180,7 +180,6 @@ public class ApplicationWindow
 			          }
 			        }
 			      });
-				//System.out.println("Incorporar Widget para folderInput");
 				continue;
 			}
 			
@@ -204,8 +203,9 @@ public class ApplicationWindow
 				//Text text = new Text(shell, SWT.SINGLE);
 				final Combo combo = new Combo(shell, SWT.SINGLE);
 				combo.setLayoutData(gridData2);
-				ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
+				final ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
 				final ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
+				
 				if(items.isEmpty())
 					Log.writeLogMessage(Log.ERROR, "No se inicializco correctamente el parametroComboBox");
 				
@@ -225,6 +225,11 @@ public class ApplicationWindow
 						Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
 						
 						String itemSelected = combo.getItem(combo.getSelectionIndex());
+						
+						if(!itemSelected.equals(parametroComboBox.getItemSelected()))
+							parametroComboBox.setItemSelected(itemSelected);
+						else
+							return;
 						
 						Shell previousShell = shell;
 						initializeWindow();
