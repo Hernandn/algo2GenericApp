@@ -1,4 +1,9 @@
 package test;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -26,6 +31,13 @@ public static void main (String [] args)
         }
     });
 
+    LocalDate dateAux = LocalDate.of(calendar.getYear(),calendar.getMonth(),calendar.getDay());
+    System.out.println(dateAux);
+	
+	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+	  String text = ""+calendar.getYear()+calendar.getMonth()+calendar.getDay();
+	  final LocalDate date = LocalDate.parse(text, formatter);
+    
     //boton
     
     Button okBtn = new Button(shell, SWT.PUSH);
@@ -33,6 +45,7 @@ public static void main (String [] args)
 	okBtn.addSelectionListener (new SelectionAdapter () {
         public void widgetSelected (SelectionEvent e) {
             System.out.println (calendar.getDay()+"/"+calendar.getMonth()+"/"+calendar.getYear());
+            System.out.println(date);
         }
     });
 	

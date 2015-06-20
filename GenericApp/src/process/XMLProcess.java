@@ -202,8 +202,9 @@ public class XMLProcess
 		
 		if(nodeList != null && nodeList.getLength() > 0) 
 		{
-			ParametroCheckBox parametro = new ParametroCheckBox(label, flag, inputs.checkBox, validation);
 			Element elemAux = (Element) nodeList.item(0);
+			String checkBoxFlag = elemAux.getAttribute("flag");
+			ParametroCheckBox parametro = new ParametroCheckBox(label, checkBoxFlag, inputs.checkBox, validation);
 			parametro.addSubparametros(listaSubparametrosIfSelected(elemAux));
 			return parametro;
 		}

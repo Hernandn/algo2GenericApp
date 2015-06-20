@@ -1,7 +1,12 @@
 package process;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
+import java.time.*;
 
 import listeners.ComboBoxItemListener;
 import log.Log;
@@ -109,37 +114,84 @@ public class ApplicationWindow
 				Iterator<Parametro> iterator_parametros;
 				iterator_parametros = actualApplication.parametros.iterator();
 				
+				Iterator<Widget> iterator_widgets = parametrosCargados.iterator();
+				
 				while(iterator_parametros.hasNext())
 				{
 					Parametro parametro = (Parametro) iterator_parametros.next();
-					if(!parametro.tieneInput())
-			        {
-						fullCommand += " " + parametro.flag;
-			        	continue;
-			        }
+					Widget widget = (Widget) iterator_widgets.next();
 					
-					Control[] children = shell.getChildren();
-					
-					for (int i = 0; i < children.length; i++) 
-				    {
-						Control child = children[i];
-				      
-						if(parametro.inputType.equals(inputs.comboBox))
-						{
-							if(child instanceof Combo)
-							{
-								Combo combo = (Combo) child;
-								//TODO: Terminar logica para traer el flag que esta dentro del comboBoxItem
-								ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
-								fullCommand += " " + parametro.flag;
-								fullCommand += " " + combo.getText();
-							}
-						}
-				    }
+					fullCommand += getCommandString(widget, parametro);
 				}
 				Log.writeLogMessage(Log.INFO, fullCommand);
 			}});
 	};
+	
+	//TODO: falta hacer las validaciones para cada uno
+	private String getCommandString(Widget widget, Parametro parametro)
+	{
+		if(!parametro.tieneInput())
+        {
+			return " " + parametro.flag;
+        }
+		
+		//TODO: esta tirando un error
+		if(parametro.inputType.equals(inputs.comboBox))
+		{
+			Combo combo = (Combo) widget;
+			ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
+			ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
+			System.out.println("llego hasta aca");
+			int a=combo.getSelectionIndex(); //aca esta el error porque no se como obtener la opcion elegida (de esta forma tira error)
+			System.out.println("llego hasta aca 2");
+			return " " + items.get(a).getFlag();
+		}
+		
+		if(parametro.inputType.equals(inputs.checkBox))
+		{
+			Button checkBox = (Button) widget;
+			if(checkBox.getSelection())	//agrega el flag si el checkBox esta tildado
+			{
+				return " " + parametro.flag;
+			}
+			return "";
+		}
+		
+		if(parametro.inputType.equals(inputs.dateTimePicker))
+		{
+			DateTime date = (DateTime) widget;
+			LocalDate dateAux = LocalDate.of(date.getYear(),date.getMonth(),date.getDay());
+			
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			return "";
+			//TODO: terminar esto de la fecha
+		}
+		
+		if(parametro.inputType.equals(inputs.radioButton))
+		{
+			
+		}
+		
+		if(parametro.inputType.equals(inputs.textBox))
+		{
+			Text text = (Text) widget;
+			return " "+text.getText();
+		}
+		
+		if(parametro.inputType.equals(inputs.fileInput))
+		{
+			Text text = (Text) widget;
+			return " "+text.getText();
+		}
+		
+		if(parametro.inputType.equals(inputs.folderInput))
+		{
+			Text text = (Text) widget;
+			return " "+text.getText();
+		}
+		return "";
+	}
+	
 	
 	public Combo getCombo(String itemSelected)
 	{
@@ -180,6 +232,8 @@ public class ApplicationWindow
 	        if(!parametro.tieneInput())
 	        {
 	        	System.out.println("Parametro sin input");
+	        	//como no tiene widget, agrego al array de parametrosCargados un null
+	        	parametrosCargados.add(null);
 	        	continue;
 	        }
 	        
@@ -189,6 +243,7 @@ public class ApplicationWindow
 		        Button checkBox = new Button(shell, SWT.CHECK);
 		    	checkBox.setText(parametro.label);
 		    	checkBox.setLayoutData(gridData2);
+		    	parametrosCargados.add(checkBox);
 				continue;
 			}
 	        
@@ -228,6 +283,7 @@ public class ApplicationWindow
 			          }
 			        }
 			      });
+			    parametrosCargados.add(text);
 				continue;
 			}
 			
@@ -235,6 +291,7 @@ public class ApplicationWindow
 			{
 				Text text = new Text(shell, SWT.SINGLE);
 				text.setLayoutData(gridData2);
+				parametrosCargados.add(text);
 				continue;
 			}
 			
@@ -243,6 +300,7 @@ public class ApplicationWindow
 				Text text = new Text(shell, SWT.SINGLE);
 				text.setLayoutData(gridData2);
 				System.out.println("Incorporar Widget para fileInput");
+				parametrosCargados.add(text);
 				continue;
 			}
 			
@@ -270,7 +328,7 @@ public class ApplicationWindow
 					@Override
 					public void widgetSelected(SelectionEvent e) 
 					{
-						Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
+						Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : items.get(combo.getSelectionIndex()).getFlag()) + ", text content in the text field: " + combo.getText());
 						
 						String itemSelected = combo.getItem(combo.getSelectionIndex());
 						
@@ -338,7 +396,7 @@ public class ApplicationWindow
 					}
 					
 				});
-				
+				parametrosCargados.add(combo);
 				continue;
 			}
 			
@@ -348,6 +406,7 @@ public class ApplicationWindow
 			{
 				final DateTime calendar = new DateTime (shell, SWT.CALENDAR);
 				calendar.setLayoutData(gridData2);
+				parametrosCargados.add(calendar);
 				continue;
 			}
 			
@@ -356,6 +415,7 @@ public class ApplicationWindow
 				Text text = new Text(shell, SWT.SINGLE);
 				text.setLayoutData(gridData2);
 				Log.writeLogMessage(Log.ERROR, "Incorporar Widget para radioButton");
+				parametrosCargados.add(text);
 				continue;
 			}
 			else	//(parametro.inputType == null)
