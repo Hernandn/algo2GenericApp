@@ -2,6 +2,7 @@ package test;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.eclipse.swt.SWT;
@@ -25,27 +26,21 @@ public static void main (String [] args)
     
     //calendario
     final DateTime calendar = new DateTime (shell, SWT.CALENDAR);
+    final DateTimeFormatter format = DateTimeFormatter.ofPattern("yy/MM/dd");
     calendar.addSelectionListener (new SelectionAdapter() {
         public void widgetSelected (SelectionEvent e) {
-            System.out.println ("calendar date changed");
+            System.out.println ("date changed");
         }
     });
 
-    LocalDate dateAux = LocalDate.of(calendar.getYear(),calendar.getMonth(),calendar.getDay());
-    System.out.println(dateAux);
-	
-	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
-	  String text = ""+calendar.getYear()+calendar.getMonth()+calendar.getDay();
-	  final LocalDate date = LocalDate.parse(text, formatter);
-    
     //boton
     
     Button okBtn = new Button(shell, SWT.PUSH);
 	okBtn.setText("Execute");
 	okBtn.addSelectionListener (new SelectionAdapter () {
         public void widgetSelected (SelectionEvent e) {
-            System.out.println (calendar.getDay()+"/"+calendar.getMonth()+"/"+calendar.getYear());
-            System.out.println(date);
+        	LocalDate date = LocalDate.of(calendar.getYear(),calendar.getMonth()+1,calendar.getDay());
+        	System.out.println(date.format(format));
         }
     });
 	

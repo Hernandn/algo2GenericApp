@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 import listeners.ComboBoxItemListener;
 import log.Log;
@@ -25,6 +26,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
@@ -35,6 +37,7 @@ import org.eclipse.swt.widgets.Widget;
 import parametros.ComboBoxItem;
 import parametros.Parametro;
 import parametros.ParametroComboBox;
+import parametros.ParametroDate;
 import parametros.Parametro.inputs;
 
 public class ApplicationWindow 
@@ -142,7 +145,12 @@ public class ApplicationWindow
 			ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
 			ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
 			System.out.println("llego hasta aca");
-			int a=combo.getSelectionIndex(); //aca esta el error porque no se como obtener la opcion elegida (de esta forma tira error)
+			int a=combo.indexOf(parametroComboBox.getItemSelected()); //aca esta el error porque no se como obtener la opcion elegida (de esta forma tira error)
+			/*
+			 * TODO: se me ocurre que para arreglarlo hay que cambiar la parte del Listener del comboBox
+			 * para que en vez de estar verificando por string del item, guardar el index de la seleccion
+			 * hecha en el ParametroComboBox (osea al atributo "int itemSelected")
+			 */
 			System.out.println("llego hasta aca 2");
 			return " " + items.get(a).getFlag();
 		}
@@ -159,12 +167,11 @@ public class ApplicationWindow
 		
 		if(parametro.inputType.equals(inputs.dateTimePicker))
 		{
-			DateTime date = (DateTime) widget;
-			LocalDate dateAux = LocalDate.of(date.getYear(),date.getMonth(),date.getDay());
-			
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			return "";
-			//TODO: terminar esto de la fecha
+			DateTime calendar = (DateTime) widget;
+			LocalDate date = LocalDate.of(calendar.getYear(),calendar.getMonth()+1,calendar.getDay());	//el month+1 es por un tema del LocalDate
+			String pattern = ((ParametroDate) parametro).getFormat();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
+			return " " + date.format(format);
 		}
 		
 		if(parametro.inputType.equals(inputs.radioButton))
@@ -291,16 +298,43 @@ public class ApplicationWindow
 			{
 				Text text = new Text(shell, SWT.SINGLE);
 				text.setLayoutData(gridData2);
+				System.out.println("Incorporar Widget para fileInput");
 				parametrosCargados.add(text);
 				continue;
 			}
 			
 			else if(parametro.inputType.equals(inputs.fileInput))
 			{
-				Text text = new Text(shell, SWT.SINGLE);
-				text.setLayoutData(gridData2);
-				System.out.println("Incorporar Widget para fileInput");
-				parametrosCargados.add(text);
+				final Text text = new Text(shell, SWT.PUSH);
+				text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+				
+				Button button = new Button(shell, SWT.PUSH);
+			    button.setText("Browse...");
+			    button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			    button.addSelectionListener(new SelectionAdapter() {
+			        public void widgetSelected(SelectionEvent event) {
+			          FileDialog dlg = new FileDialog(shell);
+
+			          // Set the initial filter path according
+			          // to anything they've selected or typed in
+			          dlg.setFilterPath(text.getText());
+
+			          // Change the title bar text
+			          dlg.setText("SWT's FileDialog");
+
+			          // Customizable message displayed in the dialog
+
+			          // Calling open() will open and run the dialog.
+			          // It will return the selected directory, or
+			          // null if user cancels
+			          String dir = dlg.open();
+			          if (dir != null) {
+			            // Set the text box to the new selection
+			            text.setText(dir);
+			          }
+			        }
+			      });
+			    parametrosCargados.add(text);
 				continue;
 			}
 			

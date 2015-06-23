@@ -18,6 +18,7 @@ import parametros.ComboBoxItem;
 import parametros.Parametro;
 import parametros.ParametroCheckBox;
 import parametros.ParametroComboBox;
+import parametros.ParametroDate;
 import parametros.ParametroRadioButton;
 import parametros.RadioButtonItem;
 import parametros.Validation;
@@ -233,7 +234,9 @@ public class XMLProcess
 		
 		if(nodeList != null && nodeList.getLength() > 0) 
 		{
-			Parametro parametro = new Parametro(label, flag, inputs.dateTimePicker, validation);
+			Element elemAux = (Element) nodeList.item(0);
+			String format = elemAux.getAttribute("format");
+			Parametro parametro = new ParametroDate(label, flag, inputs.dateTimePicker, validation, format);
 			return parametro;
 		}
 		
