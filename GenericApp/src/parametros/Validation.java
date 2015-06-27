@@ -1,5 +1,7 @@
 package parametros;
 
+import java.io.File;
+
 public class Validation
 {
 	private int minSize;
@@ -76,5 +78,36 @@ public class Validation
 		this.hasExists = true;
 	}
 	
-	
+	public boolean validateInput(String aString)
+	{
+		if(hasMinSize && aString.length() < minSize)
+			return false;
+			
+		if(hasMaxSize && aString.length() > maxSize)
+			return false;
+		
+		if(hasNullable && !nullable && aString.length() == 0)
+			return false;
+		
+		if(hasNumeric)
+		{
+			try
+			{
+				int value = Integer.parseInt(aString);
+			}
+			catch(NumberFormatException e)
+			{
+				return false;
+			}
+		}
+		
+		if(hasExists)
+		{
+			File f = new File(aString);
+			if(!f.exists())
+				return false;
+		}
+				
+		return true;
+	}
 }

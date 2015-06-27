@@ -56,7 +56,6 @@ public class ApplicationWindow
 		parametrosCargados = new ArrayList<Widget>();
 	}
 	
-	
 	public void run()
 	{
 		showWindow();
@@ -122,6 +121,9 @@ public class ApplicationWindow
 				while(iterator_parametros.hasNext())
 				{
 					Parametro parametro = (Parametro) iterator_parametros.next();
+					
+					if(parametro.validation == null)
+						Log.writeLogMessage(Log.INFO, "Raro que no tenga ninguna validation");
 					
 					if(!parametro.tieneInput())
 			        {
@@ -196,18 +198,27 @@ public class ApplicationWindow
 		if(parametro.inputType.equals(inputs.textBox))
 		{
 			Text text = (Text) widget;
+			//TODO: Terminar el tema de Validacion. Mucho test
+			if(!parametro.validation.validateInput(text.getText()))
+				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
+			
 			return " "+text.getText();
 		}
 		
 		if(parametro.inputType.equals(inputs.fileInput))
 		{
 			Text text = (Text) widget;
+			if(!parametro.validation.validateInput(text.getText()))
+				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
 			return " "+text.getText();
 		}
 		
 		if(parametro.inputType.equals(inputs.folderInput))
 		{
 			Text text = (Text) widget;
+			if(!parametro.validation.validateInput(text.getText()))
+				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
+			
 			return " "+text.getText();
 		}
 		return "";
