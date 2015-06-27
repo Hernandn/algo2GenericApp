@@ -122,9 +122,32 @@ public class ApplicationWindow
 				while(iterator_parametros.hasNext())
 				{
 					Parametro parametro = (Parametro) iterator_parametros.next();
+					
+					if(!parametro.tieneInput())
+			        {
+						fullCommand += " " + parametro.flag;
+						continue;
+			        }
+					
 					Widget widget = (Widget) iterator_widgets.next();
 					
-					fullCommand += getCommandString(widget, parametro);
+					if(parametro.inputType.equals(inputs.comboBox))
+					{
+						Combo combo = (Combo) widget;
+						ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
+						ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
+						int index = parametroComboBox.getIndexOfItemSelected();
+						fullCommand += " " + items.get(index).getFlag();
+						for(int i=0;i < items.get(index).subParametros.size() ; i++)
+						{
+							widget = (Widget) iterator_widgets.next();
+							Parametro nuevoParametro = items.get(index).subParametros.get(i);
+							
+							fullCommand += getCommandString(widget, nuevoParametro);
+						}
+					}
+					else
+						fullCommand += getCommandString(widget, parametro);
 				}
 				Log.writeLogMessage(Log.INFO, fullCommand);
 			}});
@@ -133,28 +156,19 @@ public class ApplicationWindow
 	//TODO: falta hacer las validaciones para cada uno
 	private String getCommandString(Widget widget, Parametro parametro)
 	{
-		if(!parametro.tieneInput())
-        {
-			return " " + parametro.flag;
-        }
-		
-		//TODO: esta tirando un error
+		/* No deberia ser más necesario
 		if(parametro.inputType.equals(inputs.comboBox))
 		{
 			Combo combo = (Combo) widget;
 			ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
 			ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
-			System.out.println("llego hasta aca");
-			int a=combo.indexOf(parametroComboBox.getItemSelected()); //aca esta el error porque no se como obtener la opcion elegida (de esta forma tira error)
-			/*
-			 * TODO: se me ocurre que para arreglarlo hay que cambiar la parte del Listener del comboBox
-			 * para que en vez de estar verificando por string del item, guardar el index de la seleccion
-			 * hecha en el ParametroComboBox (osea al atributo "int itemSelected")
-			 */
-			System.out.println("llego hasta aca 2");
+			int a = parametroComboBox.getIndexOfItemSelected();
+			
+			Log.writeLogMessage(Log.ERROR, "items.get(a).subParametros.size() = " + items.get(a).subParametros.size());
+			
 			return " " + items.get(a).getFlag();
 		}
-		
+		*/
 		if(parametro.inputType.equals(inputs.checkBox))
 		{
 			Button checkBox = (Button) widget;
@@ -224,8 +238,7 @@ public class ApplicationWindow
 	
 	public void addParameters()
 	{
-		 
-		
+		parametrosCargados.clear();
 		Iterator<Parametro> iterator_parametros;
 		iterator_parametros = actualApplication.parametros.iterator();
 		while(iterator_parametros.hasNext())
@@ -365,9 +378,11 @@ public class ApplicationWindow
 						Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : items.get(combo.getSelectionIndex()).getFlag()) + ", text content in the text field: " + combo.getText());
 						
 						String itemSelected = combo.getItem(combo.getSelectionIndex());
+						int indexOfItemSelected = combo.getSelectionIndex();
 						
-						if(!itemSelected.equals(parametroComboBox.getItemSelected()))
-							parametroComboBox.setItemSelected(itemSelected);
+						//if(!itemSelected.equals(parametroComboBox.getItemSelected()))
+						if(indexOfItemSelected != parametroComboBox.getIndexOfItemSelected())
+							parametroComboBox.setIndexOfItemSelected(combo.getSelectionIndex());
 						else
 							return;
 						
@@ -399,6 +414,7 @@ public class ApplicationWindow
 					
 										Text text = new Text(shell, SWT.SINGLE);
 										text.setLayoutData(gridData2);
+										parametrosCargados.add(text);
 									}
 								}
 								
