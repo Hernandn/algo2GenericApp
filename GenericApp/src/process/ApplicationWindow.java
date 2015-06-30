@@ -1,16 +1,12 @@
 package process;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
-import listeners.ComboBoxItemListener;
 import log.Log;
+
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,6 +30,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
+import listeners.executeButtonListener;
 import parametros.ComboBoxItem;
 import parametros.Parametro;
 import parametros.ParametroComboBox;
@@ -101,62 +98,13 @@ public class ApplicationWindow
 		okBtn = new Button(shell, SWT.PUSH);
 		okBtn.setText("Execute");
 		okBtn.setLayoutData(gridData_button);
-		okBtn.addListener(SWT.Selection, new Listener(){
-
-			@Override
-			public void handleEvent(Event event) 
-			{
-				String fullCommand = "";
-				
-				if(!actualApplication.exePath.equals(""))
-					fullCommand += actualApplication.exePath;
-				else
-					fullCommand += actualApplication.command;
-				
-				Iterator<Parametro> iterator_parametros;
-				iterator_parametros = actualApplication.parametros.iterator();
-				
-				Iterator<Widget> iterator_widgets = parametrosCargados.iterator();
-				
-				while(iterator_parametros.hasNext())
-				{
-					Parametro parametro = (Parametro) iterator_parametros.next();
-					
-					if(parametro.validation == null)
-						Log.writeLogMessage(Log.INFO, "Raro que no tenga ninguna validation");
-					
-					if(!parametro.tieneInput())
-			        {
-						fullCommand += " " + parametro.flag;
-						continue;
-			        }
-					
-					Widget widget = (Widget) iterator_widgets.next();
-					
-					if(parametro.inputType.equals(inputs.comboBox))
-					{
-						Combo combo = (Combo) widget;
-						ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
-						ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
-						int index = parametroComboBox.getIndexOfItemSelected();
-						fullCommand += " " + items.get(index).getFlag();
-						for(int i=0;i < items.get(index).subParametros.size() ; i++)
-						{
-							widget = (Widget) iterator_widgets.next();
-							Parametro nuevoParametro = items.get(index).subParametros.get(i);
-							
-							fullCommand += getCommandString(widget, nuevoParametro);
-						}
-					}
-					else
-						fullCommand += getCommandString(widget, parametro);
-				}
-				Log.writeLogMessage(Log.INFO, fullCommand);
-			}});
+		//No soporto los mètodos en el AddListener
+		Listener listener = new executeButtonListener(this);
+		okBtn.addListener(SWT.Selection, listener);
 	};
 	
 	//TODO: falta hacer las validaciones para cada uno
-	private String getCommandString(Widget widget, Parametro parametro)
+	public String getCommandString(Widget widget, Parametro parametro)
 	{
 		/* No deberia ser mÃ¡s necesario
 		if(parametro.inputType.equals(inputs.comboBox))
