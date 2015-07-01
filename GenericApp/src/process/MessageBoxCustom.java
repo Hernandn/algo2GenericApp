@@ -40,11 +40,10 @@ public class MessageBoxCustom
 
 		int style = SWT.ICON_ERROR;
 		
+		
 		MessageBox messageBox = new MessageBox(shell, style);
 	    messageBox.setMessage(message);
 	    messageBox.open();
-	    
-	    display.dispose();
 	}
 	
 	public static int MessageBoxOptions(String Title, String message)

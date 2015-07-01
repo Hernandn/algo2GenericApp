@@ -1,7 +1,5 @@
 package parametros;
 
-import java.io.ObjectInputStream.GetField;
-
 public class ParametroDate extends Parametro
 {
 	private String format;

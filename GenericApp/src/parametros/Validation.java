@@ -2,6 +2,8 @@ package parametros;
 
 import java.io.File;
 
+import log.Log;
+
 public class Validation
 {
 	private int minSize;
@@ -93,7 +95,7 @@ public class Validation
 		{
 			try
 			{
-				int value = Integer.parseInt(aString);
+				Integer.parseInt(aString);
 			}
 			catch(NumberFormatException e)
 			{
@@ -103,6 +105,7 @@ public class Validation
 		
 		if(hasExists)
 		{
+			Log.writeLogMessage(Log.INFO, "hasExists");
 			File f = new File(aString);
 			if(!f.exists())
 				return false;

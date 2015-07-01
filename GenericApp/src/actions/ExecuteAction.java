@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Listener;
 
 import process.ApplicationWindow;
 import process.MainWindow;
+import process.MessageBoxCustom;
 
 public class ExecuteAction implements Listener{
 
@@ -19,12 +20,17 @@ public class ExecuteAction implements Listener{
 	@Override
 	public void handleEvent(Event event) 
 	{
+		if(mainWindow.applicationSelected == null)
+		{
+			MessageBoxCustom messageBoxCustom = new MessageBoxCustom(mainWindow.shell, mainWindow.display);
+			messageBoxCustom.MessageBoxError("Por favor seleccione una aplicacion.");
+			return;
+		} 
+
 		switch (event.type) 
         {
         	case SWT.Selection:
         		mainWindow.shell.setVisible(false);
-	          	//MessageBoxCustom messageBoxCustom = new MessageBoxCustom(mainWindow.shell, mainWindow.display);
-	          	//messageBoxCustom.MessageBoxError("Qué estas haciendo?");
         		ApplicationWindow applicationWindow = new ApplicationWindow(mainWindow.display, mainWindow.applicationSelected);
         		applicationWindow.run();
         		break;

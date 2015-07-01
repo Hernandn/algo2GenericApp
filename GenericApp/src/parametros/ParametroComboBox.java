@@ -5,14 +5,12 @@ import java.util.ArrayList;
 public class ParametroComboBox extends Parametro
 {
 	private ArrayList<ComboBoxItem> comboBoxItems;
-	private String itemSelected;
 	public int indexOfItemSelected;
 	
 	public ParametroComboBox(String aLabel,String aFlag, inputs anInput, Validation aValidation)
 	{
 		super(aLabel, aFlag, anInput, aValidation);
 		comboBoxItems = new ArrayList<ComboBoxItem>();
-		itemSelected = "";
 		indexOfItemSelected = -1;
 	}
 	

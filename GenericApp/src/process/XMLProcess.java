@@ -277,6 +277,12 @@ public class XMLProcess
 	{
 		Element elemAux = (Element) element.getElementsByTagName("validation").item(0);
 		Validation validation = new Validation();
+		if(elemAux == null)
+		{
+			Log.writeLogMessage(Log.INFO, "No existe tag Validation");
+			return null;
+		}
+		
 		String minSize = elemAux.getAttribute("minSize");
 		if(minSize.length()>0)
 		{

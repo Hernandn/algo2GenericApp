@@ -3,7 +3,6 @@ package listeners;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
@@ -15,6 +14,7 @@ import parametros.ParametroComboBox;
 import parametros.Parametro.inputs;
 import process.ApplicationWindow;
 import process.Consola;
+import process.MessageBoxCustom;
 
 public class executeButtonListener implements Listener 
 {
@@ -54,28 +54,46 @@ public class executeButtonListener implements Listener
 	        }
 			
 			Widget widget = (Widget) iterator_widgets.next();
+			String string;
 			
 			if(parametro.inputType.equals(inputs.comboBox))
 			{
-				Combo combo = (Combo) widget;
 				ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
 				ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
 				int index = parametroComboBox.getIndexOfItemSelected();
+				if(index == -1)
+				{
+					MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
+					messageBoxCustom.MessageBoxError("Por favor seleccione una de las opciones");
+					return;
+				}	
+				
 				fullCommand += " " + items.get(index).getFlag();
 				for(int i=0;i < items.get(index).subParametros.size() ; i++)
 				{
 					widget = (Widget) iterator_widgets.next();
 					Parametro nuevoParametro = items.get(index).subParametros.get(i);
 					
-					fullCommand += applicationWindow.getCommandString(widget, nuevoParametro);
+					string = applicationWindow.getCommandString(widget, nuevoParametro);
+					if(string.equals(""))
+						return;
+					
+					fullCommand += string;
 				}
 			}
 			else
-				fullCommand += applicationWindow.getCommandString(widget, parametro);
+			{
+				string = applicationWindow.getCommandString(widget, parametro);
+				if(string.equals(""))
+					return;
+				
+				fullCommand += string;
+			}
 		}
+		
 		Log.writeLogMessage(Log.INFO, fullCommand);
-		applicationWindow.shell.setVisible(false);
-		new Consola(applicationWindow.display, fullCommand);
+		ApplicationWindow.shell.setVisible(false);
+		new Consola(ApplicationWindow.display, fullCommand);
 	}
 
 }

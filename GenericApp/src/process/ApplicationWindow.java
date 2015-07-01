@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -98,27 +97,12 @@ public class ApplicationWindow
 		okBtn = new Button(shell, SWT.PUSH);
 		okBtn.setText("Execute");
 		okBtn.setLayoutData(gridData_button);
-		//No soporto los mètodos en el AddListener
 		Listener listener = new executeButtonListener(this);
 		okBtn.addListener(SWT.Selection, listener);
 	};
 	
-	//TODO: falta hacer las validaciones para cada uno
 	public String getCommandString(Widget widget, Parametro parametro)
 	{
-		/* No deberia ser mÃ¡s necesario
-		if(parametro.inputType.equals(inputs.comboBox))
-		{
-			Combo combo = (Combo) widget;
-			ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
-			ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
-			int a = parametroComboBox.getIndexOfItemSelected();
-			
-			Log.writeLogMessage(Log.ERROR, "items.get(a).subParametros.size() = " + items.get(a).subParametros.size());
-			
-			return " " + items.get(a).getFlag();
-		}
-		*/
 		if(parametro.inputType.equals(inputs.checkBox))
 		{
 			Button checkBox = (Button) widget;
@@ -147,26 +131,39 @@ public class ApplicationWindow
 		{
 			Text text = (Text) widget;
 			//TODO: Terminar el tema de Validacion. Mucho test
-			if(!parametro.validation.validateInput(text.getText()))
+			if( parametro.validation != null && !parametro.validation.validateInput(text.getText()))
+			{
 				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
-			
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
+				messageBoxCustom.MessageBoxError("Error de Validacion en textBox");
+				return "";
+			}
 			return " "+text.getText();
 		}
 		
 		if(parametro.inputType.equals(inputs.fileInput))
 		{
 			Text text = (Text) widget;
-			if(!parametro.validation.validateInput(text.getText()))
+			if( parametro.validation != null && !parametro.validation.validateInput(text.getText()))
+			{	
 				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
+				messageBoxCustom.MessageBoxError("Error de Validacion en fileInput");
+				return "";
+			}			
 			return " "+text.getText();
 		}
 		
 		if(parametro.inputType.equals(inputs.folderInput))
 		{
 			Text text = (Text) widget;
-			if(!parametro.validation.validateInput(text.getText()))
+			if( parametro.validation != null && !parametro.validation.validateInput(text.getText()))
+			{
 				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
-			
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
+				messageBoxCustom.MessageBoxError("Error de Validacion en folderInput");
+				return "";
+			} 
 			return " "+text.getText();
 		}
 		return "";
@@ -312,7 +309,6 @@ public class ApplicationWindow
 			
 			else if(parametro.inputType.equals(inputs.comboBox))
 			{
-				//Text text = new Text(shell, SWT.SINGLE);
 				final Combo combo = new Combo(shell, SWT.SINGLE);
 				combo.setLayoutData(gridData2);
 				final ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
@@ -339,7 +335,6 @@ public class ApplicationWindow
 						String itemSelected = combo.getItem(combo.getSelectionIndex());
 						int indexOfItemSelected = combo.getSelectionIndex();
 						
-						//if(!itemSelected.equals(parametroComboBox.getItemSelected()))
 						if(indexOfItemSelected != parametroComboBox.getIndexOfItemSelected())
 							parametroComboBox.setIndexOfItemSelected(combo.getSelectionIndex());
 						else
@@ -378,7 +373,7 @@ public class ApplicationWindow
 								}
 								
 								Button ExecuteButton = okBtn;
-								GridData data = (GridData) ExecuteButton.getLayoutData();
+								//GridData data = (GridData) ExecuteButton.getLayoutData();
 								ExecuteButton.dispose();
 								
 								addExecuteButton();
