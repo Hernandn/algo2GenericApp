@@ -2,12 +2,11 @@ package process;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import log.Log;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
@@ -26,6 +25,8 @@ import parametros.Parametro.inputs;
 
 public class XMLProcess 
 {
+	private static final Logger logger = Logger.getLogger(XMLProcess.class.getName());
+	
 	public String filename;
 	Document document;
 	String fullCommand;
@@ -34,8 +35,12 @@ public class XMLProcess
 	{
 		filename = FileName;
 		fullCommand = "";
-		Log.writeLogMessage(Log.DEBUG, "Archivo = " + FileName);
-		Log.writeLogMessage(Log.INFO, "XML Process creado");
+		
+		//Log.writeLogMessage(Log.DEBUG, "Archivo = " + FileName);
+		logger.fine("Archivo = " + FileName);
+		//Log.writeLogMessage(Log.INFO, "XML Process creado");
+		logger.fine("XML Process creado");
+		
 		parseXmlFile();
 	}
 	
@@ -78,7 +83,8 @@ public class XMLProcess
 		
 		if(nodeList_Aplication == null)
 		{
-			Log.writeLogMessage(Log.ERROR, "No puede no tener tag application");
+			//Log.writeLogMessage(Log.ERROR, "No puede no tener tag application");
+			logger.severe("No puede no tener tag application");
 			return null;
 		}
 		
@@ -98,7 +104,8 @@ public class XMLProcess
 			nodeList_Head = element.getElementsByTagName("head");
 			if(nodeList_Head == null || nodeList_Head.getLength() > 1)
 			{
-				Log.writeLogMessage(Log.ERROR, "No puede no tener tag head o tener más de uno");
+				//Log.writeLogMessage(Log.ERROR, "No puede no tener tag head o tener más de uno");
+				logger.severe("No puede no tener tag head o tener m�s de uno");
 				return null;
 			}
 			
@@ -119,7 +126,8 @@ public class XMLProcess
 			
 			if(nodeList_Parameters == null)
 			{
-				Log.writeLogMessage(Log.ERROR, "No puede no tener tag parameter");
+				//Log.writeLogMessage(Log.ERROR, "No puede no tener tag parameter");
+				logger.severe("No puede no tener tag parameter");
 				return null;
 			}
 
@@ -138,8 +146,8 @@ public class XMLProcess
 	{
 		Element element;
 		
-		Log.writeLogMessage(Log.DEBUG, "getParamentro(" + app.name + ")");
-		
+		//Log.writeLogMessage(Log.DEBUG, "getParamentro(" + app.name + ")");
+		logger.fine("getParamentro(" + app.name + ")");
 		for(int j = 0 ; j < nodeList_Parameters.getLength();j++) 
 		{	
 			element = (Element)nodeList_Parameters.item(j);
@@ -181,15 +189,21 @@ public class XMLProcess
 			NodeList items = elemAux.getElementsByTagName("comboBoxItem");	//lista de <comboBoxItem>
 			for(int k=0 ; k < items.getLength() ; k++)
 			{
-				Log.writeLogMessage(Log.DEBUG, "Entro en el for de comboBoxItem");
-				Log.writeLogMessage(Log.DEBUG, "tems.getLength() = " + items.getLength());
+				//Log.writeLogMessage(Log.DEBUG, "Entro en el for de comboBoxItem");
+				logger.fine("Entro en el for de comboBoxItem");
+				
+				//Log.writeLogMessage(Log.DEBUG, "tems.getLength() = " + items.getLength());
+				logger.fine("tems.getLength() = " + items.getLength());
 				
 				elemAux = (Element) items.item(k);			//cada <comboBoxItem> de la lista
 				String tag = elemAux.getAttribute("tag");
 				String flag2 = elemAux.getAttribute("flag");
 				
-				Log.writeLogMessage(Log.DEBUG, "tag = " + tag);
-				Log.writeLogMessage(Log.DEBUG, "flag = " + flag2);
+				//Log.writeLogMessage(Log.DEBUG, "tag = " + tag);
+				logger.fine("tag = " + tag);
+				
+				//Log.writeLogMessage(Log.DEBUG, "flag = " + flag2);
+				logger.fine("flag = " + flag2);
 				
 				ComboBoxItem cBItem = new ComboBoxItem(tag, flag2);
 				cBItem.addSubParametros(listaSubparametrosIfSelected(elemAux));	//agrega todos los subparametros en <ifSelected>
@@ -279,7 +293,8 @@ public class XMLProcess
 		Validation validation = new Validation();
 		if(elemAux == null)
 		{
-			Log.writeLogMessage(Log.INFO, "No existe tag Validation");
+			//Log.writeLogMessage(Log.INFO, "No existe tag Validation");
+			logger.info("No existe tag Validation");
 			return null;
 		}
 		
@@ -315,12 +330,16 @@ public class XMLProcess
 	{
 		String textVal = null;
 		
-		Log.writeLogMessage(Log.DEBUG, "Buscando el Tag " + tagName);
+		//Log.writeLogMessage(Log.DEBUG, "Buscando el Tag " + tagName);
+		logger.fine("Buscando el Tag " + tagName);
+		
 		NodeList nodeList = element.getElementsByTagName(tagName);
 		if(nodeList != null && nodeList.getLength() > 0) 
 		{
 			
-			Log.writeLogMessage(Log.DEBUG, "nodeList != null");
+			//Log.writeLogMessage(Log.DEBUG, "nodeList != null");
+			logger.fine("nodeList != null");
+			
 			Element el = (Element)nodeList.item(0);
 			try
 			{

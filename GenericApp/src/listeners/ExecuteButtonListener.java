@@ -2,25 +2,27 @@ package listeners;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
-import log.Log;
 import parametros.ComboBoxItem;
 import parametros.Parametro;
-import parametros.ParametroComboBox;
 import parametros.Parametro.inputs;
+import parametros.ParametroComboBox;
 import process.ApplicationWindow;
 import process.Consola;
 import process.MessageBoxCustom;
 
-public class executeButtonListener implements Listener 
+public class ExecuteButtonListener implements Listener 
 {
+	private static final Logger logger = Logger.getLogger(ExecuteButtonListener.class.getName());
+	
 	public static ApplicationWindow applicationWindow;
 	
-	public executeButtonListener(ApplicationWindow applicationWindowObject)
+	public ExecuteButtonListener(ApplicationWindow applicationWindowObject)
 	{
 		applicationWindow = applicationWindowObject;
 	}
@@ -45,7 +47,8 @@ public class executeButtonListener implements Listener
 			Parametro parametro = (Parametro) iterator_parametros.next();
 			
 			if(parametro.validation == null)
-				Log.writeLogMessage(Log.INFO, "Raro que no tenga ninguna validation");
+				//Log.writeLogMessage(Log.INFO, "Raro que no tenga ninguna validation");
+				logger.info("Raro que no tenga ninguna validation");
 			
 			if(!parametro.tieneInput())
 	        {
@@ -91,7 +94,9 @@ public class executeButtonListener implements Listener
 			}
 		}
 		
-		Log.writeLogMessage(Log.INFO, fullCommand);
+		//Log.writeLogMessage(Log.INFO, fullCommand);
+		logger.info("fullCommand: " + fullCommand);
+		
 		ApplicationWindow.shell.setVisible(false);
 		new Consola(ApplicationWindow.display, fullCommand);
 	}

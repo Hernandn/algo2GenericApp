@@ -1,11 +1,14 @@
 package parametros;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import log.Log;
 
 public class Validation
 {
+	private static final Logger logger = Logger.getLogger(Validation.class.getName());
+	
 	private int minSize;
 	private boolean hasMinSize = false;
 	
@@ -105,7 +108,9 @@ public class Validation
 		
 		if(hasExists)
 		{
-			Log.writeLogMessage(Log.INFO, "hasExists");
+			//Log.writeLogMessage(Log.INFO, "hasExists");
+			logger.info("hasExists");
+			
 			File f = new File(aString);
 			if(!f.exists())
 				return false;

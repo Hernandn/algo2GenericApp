@@ -2,11 +2,11 @@ package process;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Logger;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 import log.Log;
-
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
-import listeners.executeButtonListener;
+import listeners.ExecuteButtonListener;
 import parametros.ComboBoxItem;
 import parametros.Parametro;
 import parametros.ParametroComboBox;
@@ -38,6 +38,8 @@ import parametros.Parametro.inputs;
 
 public class ApplicationWindow 
 {
+	private static final Logger logger = Logger.getLogger(ApplicationWindow.class.getName());
+	
 	public static Display display;
 	public static Shell shell;
 	public static Aplicacion actualApplication;
@@ -97,7 +99,7 @@ public class ApplicationWindow
 		okBtn = new Button(shell, SWT.PUSH);
 		okBtn.setText("Execute");
 		okBtn.setLayoutData(gridData_button);
-		Listener listener = new executeButtonListener(this);
+		Listener listener = new ExecuteButtonListener(this);
 		okBtn.addListener(SWT.Selection, listener);
 	};
 	
@@ -133,7 +135,9 @@ public class ApplicationWindow
 			//TODO: Terminar el tema de Validacion. Mucho test
 			if( parametro.validation != null && !parametro.validation.validateInput(text.getText()))
 			{
-				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
+				//Log.writeLogMessage(Log.ERROR, "Error de Validacion");
+				logger.severe("Error de validación");
+				
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
 				messageBoxCustom.MessageBoxError("Error de Validacion en textBox");
 				return "";
@@ -315,8 +319,9 @@ public class ApplicationWindow
 				final ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
 				
 				if(items.isEmpty())
-					Log.writeLogMessage(Log.ERROR, "No se inicializco correctamente el parametroComboBox");
-				
+					//Log.writeLogMessage(Log.ERROR, "No se inicializco correctamente el parametroComboBox");
+					logger.severe("No se inicializco correctamente el parametroComboBox");
+					
 				Iterator<ComboBoxItem> iterator_items;
 				iterator_items = items.iterator();
 				while (iterator_items.hasNext())
@@ -330,7 +335,8 @@ public class ApplicationWindow
 					@Override
 					public void widgetSelected(SelectionEvent e) 
 					{
-						Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : items.get(combo.getSelectionIndex()).getFlag()) + ", text content in the text field: " + combo.getText());
+						//Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : items.get(combo.getSelectionIndex()).getFlag()) + ", text content in the text field: " + combo.getText());
+						logger.fine("Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : items.get(combo.getSelectionIndex()).getFlag()) + ", text content in the text field: " + combo.getText());
 						
 						String itemSelected = combo.getItem(combo.getSelectionIndex());
 						int indexOfItemSelected = combo.getSelectionIndex();
@@ -360,7 +366,8 @@ public class ApplicationWindow
 									while (iterator_parametros.hasNext())
 									{
 										Parametro parametro = (Parametro) iterator_parametros.next();
-										Log.writeLogMessage(Log.DEBUG, "parametro.label = " + parametro.label);
+										//Log.writeLogMessage(Log.DEBUG, "parametro.label = " + parametro.label);
+										logger.fine("parametro.label = " + parametro.label);
 										
 										Label aLabel = new Label(shell, SWT.SINGLE);
 										aLabel.setText(parametro.label);
@@ -380,7 +387,8 @@ public class ApplicationWindow
 								
 								Combo elCombo = getCombo(itemSelected);
 								if(elCombo == null)
-									Log.writeLogMessage(Log.ERROR, "No encontre el Combo, despues de reconstruir la pantalla");
+									//Log.writeLogMessage(Log.ERROR, "No encontre el Combo, despues de reconstruir la pantalla");
+									logger.severe("No encontre el Combo, despues de reconstruir la pantalla");
 								
 								elCombo.setText(itemSelected);
 								shell.layout(false);
@@ -418,13 +426,17 @@ public class ApplicationWindow
 			{
 				Text text = new Text(shell, SWT.SINGLE);
 				text.setLayoutData(gridData2);
-				Log.writeLogMessage(Log.ERROR, "Incorporar Widget para radioButton");
+				
+				//Log.writeLogMessage(Log.ERROR, "Incorporar Widget para radioButton");
+				logger.severe("Incorporar Widget para radioButton");
+				
 				parametrosCargados.add(text);
 				continue;
 			}
 			else	//(parametro.inputType == null)
 			{
-				Log.writeLogMessage(Log.ERROR, "No se reconoce el input o el input es NULL");
+				//Log.writeLogMessage(Log.ERROR, "No se reconoce el input o el input es NULL");
+				logger.severe("No se reconoce el input o el input es NULL");
 				continue;
 			}
 	        

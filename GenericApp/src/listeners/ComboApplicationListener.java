@@ -2,8 +2,7 @@ package listeners;
 
 import java.util.Arrays;
 import java.util.Iterator;
-
-import log.Log;
+import java.util.logging.Logger;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -14,6 +13,8 @@ import process.MainWindow;
 
 public class ComboApplicationListener implements SelectionListener  
 {
+	private static final Logger logger = Logger.getLogger(ComboApplicationListener.class.getName());
+	
 	public MainWindow mainWindow;
 	
 	public ComboApplicationListener(MainWindow parent) 
@@ -36,14 +37,18 @@ public class ComboApplicationListener implements SelectionListener
 			}
 		}
 		mainWindow.optionSelected = combo.getSelectionIndex();
-		Log.writeLogMessage(Log.DEBUG, "Selected index: " + combo.getSelectionIndex() + ", selected item: " + combo.getItem(combo.getSelectionIndex()) + ", text content in the text field: " + combo.getText());
+		
+		//Log.writeLogMessage(Log.DEBUG, "Selected index: " + combo.getSelectionIndex() + ", selected item: " + combo.getItem(combo.getSelectionIndex()) + ", text content in the text field: " + combo.getText());
+		logger.fine("Selected index: " + combo.getSelectionIndex() + ", selected item: " + combo.getItem(combo.getSelectionIndex()) + ", text content in the text field: " + combo.getText());
 	}
 
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) 
 	{
 		Combo combo = mainWindow.combo;
-		Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
+		//Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
+		logger.fine("Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
+		
 		String text = combo.getText();
 		
 		if(combo.indexOf(text) < 0) 
