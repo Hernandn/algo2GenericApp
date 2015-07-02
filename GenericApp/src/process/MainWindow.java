@@ -70,7 +70,7 @@ public class MainWindow
 	    shell.setText("GenApp"); // Title of ComboBox
 	    
 	    Label label = new Label(shell, SWT.NULL);
-		label.setText("Select your the program to run");
+		label.setText("Select the program to run");
 	
 		combo = new Combo(shell, SWT.NULL);
 		

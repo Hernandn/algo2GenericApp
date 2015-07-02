@@ -155,7 +155,7 @@ public class ApplicationWindow
 				messageBoxCustom.MessageBoxError("Error de Validacion en fileInput");
 				return "";
 			}			
-			return " "+text.getText();
+			return " " + "\"" + text.getText() + "\"";	//se le agrega comillas para nombres de archivos con espacios
 		}
 		
 		if(parametro.inputType.equals(inputs.folderInput))
@@ -168,7 +168,7 @@ public class ApplicationWindow
 				messageBoxCustom.MessageBoxError("Error de Validacion en folderInput");
 				return "";
 			} 
-			return " "+text.getText();
+			return " " + "\"" + text.getText() + "\"";	//se le agrega comillas para nombres de carpetas con espacios
 		}
 		return "";
 	}

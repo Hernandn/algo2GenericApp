@@ -83,26 +83,35 @@ public class Validation
 	
 	public boolean validateInput(String aString)
 	{
-		if(hasMinSize && aString.length() < minSize)
-			return false;
-			
-		if(hasMaxSize && aString.length() > maxSize)
-			return false;
-		
-		if(hasNullable && !nullable && aString.length() == 0)
-			return false;
-		
 		if(hasNumeric)
 		{
+			int num;
 			try
 			{
-				Integer.parseInt(aString);
+				num = Integer.parseInt(aString);
 			}
 			catch(NumberFormatException e)
 			{
 				return false;
 			}
+			
+			if(hasMinSize && num < minSize)
+				return false;
+				
+			if(hasMaxSize && num > maxSize)
+				return false;
 		}
+		else	//si no es un numero
+		{
+			if(hasMinSize && aString.length() < minSize)
+				return false;
+				
+			if(hasMaxSize && aString.length() > maxSize)
+				return false;
+		}
+		
+		if(hasNullable && !nullable && aString.length() == 0)
+			return false;
 		
 		if(hasExists)
 		{

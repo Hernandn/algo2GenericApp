@@ -23,7 +23,7 @@ public class Consola
 		shell.setLayout(new FillLayout());
 		shell.setLocation(new Point(80, 80));
 		text = new Text(shell, SWT.MULTI | SWT.V_SCROLL | SWT.READ_ONLY);
-		shell.setText("Output of the command");
+		shell.setText("Command Output");
 		shell.open();
 		ExecuteActionConsola executeActionConsola = new ExecuteActionConsola(this);
 		Display.getDefault().asyncExec(executeActionConsola);
