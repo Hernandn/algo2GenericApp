@@ -33,7 +33,7 @@
 						<item>
 							<label>Adapter (optional)</label>
 							<textBox></textBox>
-							<validation maxSize="50" nullable="true"></validation>
+							<validation maxSize="50" nullable="false"></validation>
 						</item>
 					</ifSelected>
 				</comboBoxItem>
