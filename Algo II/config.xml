@@ -18,6 +18,24 @@
 		</parameter>
 	</application>
 	
+	<application name="Copy files from a folder to another" command="xcopy">
+		<head>
+			<label>Application to Copy Files from a folder to another folder</label>
+		</head>
+		<parameter>
+			<label>Carpeta Origen</label>
+			<flag></flag>
+			<folderInput></folderInput>
+			<validation exists="true"></validation>
+		</parameter>
+		<parameter>
+			<label>Carpeta Destino</label>
+			<flag></flag>
+			<folderInput type="directory"></folderInput>
+			<validation exists="true" nullable="false"></validation>
+		</parameter>
+	</application>
+	
 	<application name="Ipconfig" exePath="" command="ipconfig">
 		<head>
 			<label>Ipconfig Diagnostic Utility for Network Connections</label>
