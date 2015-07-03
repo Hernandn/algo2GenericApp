@@ -3,12 +3,14 @@ package process;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Logger;
+import java.awt.Color;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 import log.Log;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -66,7 +68,7 @@ public class ApplicationWindow
 		//shell = new Shell(display);
 		
 		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 3;
+		gridLayout.numColumns = 4;
 		gridLayout.makeColumnsEqualWidth = true;
 		gridLayout.horizontalSpacing = 15;
 		gridLayout.marginWidth = 15;
@@ -101,7 +103,7 @@ public class ApplicationWindow
 	public void addExecuteButton()
 	{
 		GridData gridData_button = new GridData(GridData.END, GridData.CENTER, false, false);
-		gridData_button.horizontalSpan = 3;
+		gridData_button.horizontalSpan = 4;
 
 		//para dejar un espacio arriba del boton
 		Label label3 = new Label(shell, SWT.SINGLE);
@@ -219,7 +221,7 @@ public class ApplicationWindow
 
 			//para que el input complete la linea actual y quede cada parametro en una linea
 			final GridData gridData2 = new GridData(GridData.FILL_HORIZONTAL);
-	        gridData2.horizontalSpan = 3;
+	        gridData2.horizontalSpan = 4;
 	        
 	        if(!parametro.tieneInput())
 	        {
@@ -239,14 +241,17 @@ public class ApplicationWindow
 				continue;
 			}
 	        
-	        Label aLabel = new Label(shell, SWT.SINGLE);
-			aLabel.setText(parametro.label);
-			aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	        
 	        if(parametro.inputType.equals(inputs.folderInput))
 			{
+	        	Label aLabel = new Label(shell, SWT.SINGLE);
+				aLabel.setText(parametro.label);
+				aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	        	
 				final Text text = new Text(shell, SWT.PUSH);
-				text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+				GridData gridData3 = new GridData(GridData.FILL_HORIZONTAL);
+		        gridData3.horizontalSpan = 2;
+				text.setLayoutData(gridData3);
 				
 				Button button = new Button(shell, SWT.PUSH);
 			    button.setText("Browse...");
@@ -278,19 +283,17 @@ public class ApplicationWindow
 			    parametrosCargados.add(text);
 				continue;
 			}
-			
-			else if(parametro.inputType.equals(inputs.textBox))
+	        
+	        if(parametro.inputType.equals(inputs.fileInput))
 			{
-				Text text = new Text(shell, SWT.SINGLE);
-				text.setLayoutData(gridData2);
-				parametrosCargados.add(text);
-				continue;
-			}
-			
-			else if(parametro.inputType.equals(inputs.fileInput))
-			{
-				final Text text = new Text(shell, SWT.PUSH);
-				text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	        	Label aLabel = new Label(shell, SWT.SINGLE);
+				aLabel.setText(parametro.label);
+				aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	        	
+	        	final Text text = new Text(shell, SWT.PUSH);
+				GridData gridData3 = new GridData(GridData.FILL_HORIZONTAL);
+		        gridData3.horizontalSpan = 2;
+				text.setLayoutData(gridData3);
 				
 				Button button = new Button(shell, SWT.PUSH);
 			    button.setText("Browse...");
@@ -321,8 +324,22 @@ public class ApplicationWindow
 			    parametrosCargados.add(text);
 				continue;
 			}
+	        
+	        final StyledText text1 = new StyledText(shell, SWT.WRAP);
+	        text1.setText(parametro.label);
+	        text1.setBackground(shell.getBackground());
+	        text1.setTopMargin(15);
+	        text1.setBottomMargin(5);
 			
-			else if(parametro.inputType.equals(inputs.comboBox))
+			if(parametro.inputType.equals(inputs.textBox))
+			{
+				Text text = new Text(shell, SWT.SINGLE);
+				text.setLayoutData(gridData2);
+				parametrosCargados.add(text);
+				continue;
+			}
+			
+			if(parametro.inputType.equals(inputs.comboBox))
 			{
 				final Combo combo = new Combo(shell, SWT.SINGLE);
 				combo.setLayoutData(gridData2);
@@ -429,6 +446,9 @@ public class ApplicationWindow
 			{
 				final DateTime calendar = new DateTime (shell, SWT.CALENDAR);
 				calendar.setLayoutData(gridData2);
+				//calendar.getParent().getBackground()
+				calendar.setBackground(null);
+				calendar.setForeground(null);
 				parametrosCargados.add(calendar);
 				continue;
 			}
