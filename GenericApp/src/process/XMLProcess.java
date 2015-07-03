@@ -36,9 +36,7 @@ public class XMLProcess
 		filename = FileName;
 		fullCommand = "";
 		
-		//Log.writeLogMessage(Log.DEBUG, "Archivo = " + FileName);
 		logger.fine("Archivo = " + FileName);
-		//Log.writeLogMessage(Log.INFO, "XML Process creado");
 		logger.fine("XML Process creado");
 		
 		parseXmlFile();
@@ -83,7 +81,6 @@ public class XMLProcess
 		
 		if(nodeList_Aplication == null)
 		{
-			//Log.writeLogMessage(Log.ERROR, "No puede no tener tag application");
 			logger.severe("No puede no tener tag application");
 			return null;
 		}
@@ -104,8 +101,7 @@ public class XMLProcess
 			nodeList_Head = element.getElementsByTagName("head");
 			if(nodeList_Head == null || nodeList_Head.getLength() > 1)
 			{
-				//Log.writeLogMessage(Log.ERROR, "No puede no tener tag head o tener mÃ¡s de uno");
-				logger.severe("No puede no tener tag head o tener más de uno");
+				logger.severe("No puede no tener tag head o tener mï¿½s de uno");
 				return null;
 			}
 			
@@ -126,7 +122,6 @@ public class XMLProcess
 			
 			if(nodeList_Parameters == null)
 			{
-				//Log.writeLogMessage(Log.ERROR, "No puede no tener tag parameter");
 				logger.severe("No puede no tener tag parameter");
 				return null;
 			}
@@ -136,8 +131,6 @@ public class XMLProcess
 			aplicaciones.add(app);
 		}
 		
-		
-		
 		return aplicaciones;
 		
 	}
@@ -146,7 +139,6 @@ public class XMLProcess
 	{
 		Element element;
 		
-		//Log.writeLogMessage(Log.DEBUG, "getParamentro(" + app.name + ")");
 		logger.fine("getParamentro(" + app.name + ")");
 		for(int j = 0 ; j < nodeList_Parameters.getLength();j++) 
 		{	
@@ -189,20 +181,16 @@ public class XMLProcess
 			NodeList items = elemAux.getElementsByTagName("comboBoxItem");	//lista de <comboBoxItem>
 			for(int k=0 ; k < items.getLength() ; k++)
 			{
-				//Log.writeLogMessage(Log.DEBUG, "Entro en el for de comboBoxItem");
 				logger.fine("Entro en el for de comboBoxItem");
 				
-				//Log.writeLogMessage(Log.DEBUG, "tems.getLength() = " + items.getLength());
 				logger.fine("tems.getLength() = " + items.getLength());
 				
 				elemAux = (Element) items.item(k);			//cada <comboBoxItem> de la lista
 				String tag = elemAux.getAttribute("tag");
 				String flag2 = elemAux.getAttribute("flag");
 				
-				//Log.writeLogMessage(Log.DEBUG, "tag = " + tag);
 				logger.fine("tag = " + tag);
 				
-				//Log.writeLogMessage(Log.DEBUG, "flag = " + flag2);
 				logger.fine("flag = " + flag2);
 				
 				ComboBoxItem cBItem = new ComboBoxItem(tag, flag2);
@@ -227,22 +215,30 @@ public class XMLProcess
 		nodeList = element.getElementsByTagName("radioButton");
 		
 		if(nodeList != null && nodeList.getLength() > 0) 
-		{
-			ParametroRadioButton parametro = new ParametroRadioButton(label, flag, inputs.radioButton, validation);
-			Element elemAux = (Element) nodeList.item(0);	//obtengo el elemento <radioButton>
-			NodeList items = elemAux.getElementsByTagName("radioButtonItem");	//lista de <radioButtonItem>
-			for(int k=0 ; k < items.getLength() ; k++)
-			{
-				elemAux = (Element) items.item(k);			//cada <radioButtonItem> de la lista
-				String tag = getTextValue(elemAux, "tag");
-				String flag2 = getTextValue(elemAux, "flag");
-				RadioButtonItem rbItem = new RadioButtonItem(tag, flag2);
-				rbItem.addSubParametros(listaSubparametrosIfSelected(elemAux));	//agrega todos los subparametros en <ifSelected>
-				
-				parametro.addRadioButtonItem(rbItem);
-			}
-			return parametro;
-		}
+    {
+		  ParametroRadioButton parametro = new ParametroRadioButton(label, flag, inputs.radioButton, validation);
+      Element elemAux = (Element) nodeList.item(0); //obtengo el elemento <radioButton>
+      NodeList items = elemAux.getElementsByTagName("radioButtonItem");  //lista de <comboBoxItem>
+      for(int k=0 ; k < items.getLength() ; k++)
+      {
+        logger.fine("Entro en el for de radioButtonItem");
+        
+        logger.fine("items.getLength() = " + items.getLength());
+        
+        elemAux = (Element) items.item(k);      //cada <radioButtonItem> de la lista
+        String tag = elemAux.getAttribute("tag");
+        String flag2 = elemAux.getAttribute("flag");
+        
+        logger.fine("tag = " + tag);
+        logger.fine("flag = " + flag2);
+        
+        RadioButtonItem radioButtonItem = new RadioButtonItem(tag, flag2);
+        //radioButtonItem.addSubParametros(listaSubparametrosIfSelected(elemAux)); //agrega todos los subparametros en <ifSelected>
+        
+        parametro.addRadioButtonItem(radioButtonItem);
+      }
+      return parametro;
+    }
 		
 		nodeList = element.getElementsByTagName("dateTimePicker");
 		
@@ -330,14 +326,11 @@ public class XMLProcess
 	{
 		String textVal = null;
 		
-		//Log.writeLogMessage(Log.DEBUG, "Buscando el Tag " + tagName);
 		logger.fine("Buscando el Tag " + tagName);
 		
 		NodeList nodeList = element.getElementsByTagName(tagName);
 		if(nodeList != null && nodeList.getLength() > 0) 
 		{
-			
-			//Log.writeLogMessage(Log.DEBUG, "nodeList != null");
 			logger.fine("nodeList != null");
 			
 			Element el = (Element)nodeList.item(0);

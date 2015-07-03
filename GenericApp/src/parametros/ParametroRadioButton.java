@@ -17,4 +17,8 @@ public class ParametroRadioButton extends Parametro
 		this.radioButtonItems.add(rbItem);
 	}
 	
+  public ArrayList<RadioButtonItem> getRadioButtonItems() {
+    return radioButtonItems;
+  }
+	
 }

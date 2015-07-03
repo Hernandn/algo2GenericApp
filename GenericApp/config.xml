@@ -126,4 +126,33 @@
 		</parameter>
     </application>
     
+    <application name="ping" exePath="C:\Windows\System32\ping.exe" command="">
+    	
+    	<head>
+			<label>ping</label>
+		</head>
+		
+		<parameter>
+			<label>IP</label>
+			<flag></flag>
+			<textBox></textBox>
+		</parameter>
+		
+		<parameter>
+			<label>Cant. de solicitudes</label>
+			<flag>-n</flag>
+			<textBox></textBox>
+			<validation numeric="true"></validation>
+		</parameter>
+		
+		<parameter>
+			<label>IP Standard</label>
+			<radioButton>
+				<radioButtonItem tag="IPv4" flag="-4"></radioButtonItem>
+				<radioButtonItem tag="IPv6" flag="-6"></radioButtonItem>
+			</radioButton>
+		</parameter>
+		
+    </application>
+    
 </applications>

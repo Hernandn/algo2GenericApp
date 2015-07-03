@@ -1,13 +1,12 @@
 package process;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Logger;
-import java.awt.Color;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
 
-import log.Log;
+import listeners.ExecuteButtonListener;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -31,12 +30,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
-import listeners.ExecuteButtonListener;
 import parametros.ComboBoxItem;
 import parametros.Parametro;
+import parametros.Parametro.inputs;
 import parametros.ParametroComboBox;
 import parametros.ParametroDate;
-import parametros.Parametro.inputs;
+import parametros.ParametroRadioButton;
+import parametros.RadioButtonItem;
 
 public class ApplicationWindow 
 {
@@ -138,25 +138,19 @@ public class ApplicationWindow
 			return " " + date.format(format);
 		}
 		
-		if(parametro.inputType.equals(inputs.radioButton))
-		{
-			
-		}
-		
 		if(parametro.inputType.equals(inputs.textBox))
 		{
 			Text text = (Text) widget;
 			//TODO: Terminar el tema de Validacion. Mucho test
 			if( parametro.validation != null && !parametro.validation.validateInput(text.getText()))
 			{
-				//Log.writeLogMessage(Log.ERROR, "Error de Validacion");
-				logger.severe("Error de validación");
+				logger.severe("Error de validaciï¿½n");
 				
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
 				messageBoxCustom.MessageBoxError("Error de Validacion en textBox");
 				return "";
 			}
-			return " "+text.getText();
+			return " "+ parametro.flag + " " + text.getText();
 		}
 		
 		if(parametro.inputType.equals(inputs.fileInput))
@@ -164,12 +158,12 @@ public class ApplicationWindow
 			Text text = (Text) widget;
 			if( parametro.validation != null && !parametro.validation.validateInput(text.getText()))
 			{	
-				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
+				logger.severe("Error de Validacion");
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
 				messageBoxCustom.MessageBoxError("Error de Validacion en fileInput");
 				return "";
 			}			
-			return " " + "\"" + text.getText() + "\"";	//se le agrega comillas para nombres de archivos con espacios
+			return " \"" + text.getText() + "\"";	//se le agrega comillas para nombres de archivos con espacios
 		}
 		
 		if(parametro.inputType.equals(inputs.folderInput))
@@ -177,12 +171,12 @@ public class ApplicationWindow
 			Text text = (Text) widget;
 			if( parametro.validation != null && !parametro.validation.validateInput(text.getText()))
 			{
-				Log.writeLogMessage(Log.ERROR, "Error de Validacion");
+			  logger.severe("Error de Validacion");
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
 				messageBoxCustom.MessageBoxError("Error de Validacion en folderInput");
 				return "";
 			} 
-			return " " + "\"" + text.getText() + "\"";	//se le agrega comillas para nombres de carpetas con espacios
+			return " \"" + text.getText() + "\"";	//se le agrega comillas para nombres de carpetas con espacios
 		}
 		return "";
 	}
@@ -215,30 +209,34 @@ public class ApplicationWindow
 		parametrosCargados.clear();
 		Iterator<Parametro> iterator_parametros;
 		iterator_parametros = actualApplication.parametros.iterator();
+		
+		Parametro parametro;
+		
 		while(iterator_parametros.hasNext())
 		{
-			Parametro parametro = (Parametro) iterator_parametros.next();
+			parametro = (Parametro) iterator_parametros.next();
 
 			//para que el input complete la linea actual y quede cada parametro en una linea
 			final GridData gridData2 = new GridData(GridData.FILL_HORIZONTAL);
-	        gridData2.horizontalSpan = 4;
+	    
+			gridData2.horizontalSpan = 4;
 	        
-	        if(!parametro.tieneInput())
-	        {
-	        	System.out.println("Parametro sin input");
-	        	//como no tiene widget, agrego al array de parametrosCargados un null
-	        	parametrosCargados.add(null);
-	        	continue;
-	        }
-	        
-	        //valido primero para el checkbox porque tiene el label "pegado"
-	        if(parametro.inputType.equals(inputs.checkBox))
+      if(!parametro.tieneInput())
+      {
+      	System.out.println("Parametro sin input");
+      	//como no tiene widget, agrego al array de parametrosCargados un null
+      	parametrosCargados.add(null);
+      	continue;
+      }
+      
+      //valido primero para el checkbox porque tiene el label "pegado"
+      if(parametro.inputType.equals(inputs.checkBox))
 			{
-		        Button checkBox = new Button(shell, SWT.CHECK);
-		    	checkBox.setText(parametro.label);
-		    	checkBox.setLayoutData(gridData2);
-		    	parametrosCargados.add(checkBox);
-				continue;
+        Button checkBox = new Button(shell, SWT.CHECK);
+        checkBox.setText(parametro.label);
+        checkBox.setLayoutData(gridData2);
+        parametrosCargados.add(checkBox);
+        continue;
 			}
 	        
 	        
@@ -337,17 +335,45 @@ public class ApplicationWindow
 				text.setLayoutData(gridData2);
 				parametrosCargados.add(text);
 				continue;
-			}
+			}else if(parametro.inputType.equals(inputs.radioButton)) {
+        
+			  Text text = new Text(shell, SWT.SINGLE);
+        text.setLayoutData(gridData2);
+        
+        ParametroRadioButton parametroRadioButton = (ParametroRadioButton) parametro;
+        
+        int itemsCount = parametroRadioButton.getRadioButtonItems().size();
+        int i = 0;
+        
+        Button[] radioButtonComponent = null;
+        
+        if(itemsCount > 0) {
+          
+          radioButtonComponent = new Button[itemsCount];
+              
+          for(RadioButtonItem radioButtonItem : parametroRadioButton.getRadioButtonItems()) {
+            radioButtonComponent[i] = new Button(shell, SWT.RADIO);
+            radioButtonComponent[i].setText(radioButtonItem.getTag());
+            radioButtonComponent[i].setData(radioButtonItem.getFlag());
+            parametrosCargados.add(radioButtonComponent[i]);
+          } 
+        }else {
+          logger.warning("No se encontraron items de radio button para cargar.");
+        }
+        
+        parametrosCargados.add(text);
+        
+        continue;
+      }
 			
-			if(parametro.inputType.equals(inputs.comboBox))
-			{
+			if(parametro.inputType.equals(inputs.comboBox)) {
+			  
 				final Combo combo = new Combo(shell, SWT.SINGLE);
 				combo.setLayoutData(gridData2);
 				final ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
 				final ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
 				
 				if(items.isEmpty())
-					//Log.writeLogMessage(Log.ERROR, "No se inicializco correctamente el parametroComboBox");
 					logger.severe("No se inicializco correctamente el parametroComboBox");
 					
 				Iterator<ComboBoxItem> iterator_items;
@@ -363,7 +389,6 @@ public class ApplicationWindow
 					@Override
 					public void widgetSelected(SelectionEvent e) 
 					{
-						//Log.writeLogMessage(Log.DEBUG, "Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : items.get(combo.getSelectionIndex()).getFlag()) + ", text content in the text field: " + combo.getText());
 						logger.fine("Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : items.get(combo.getSelectionIndex()).getFlag()) + ", text content in the text field: " + combo.getText());
 						
 						String itemSelected = combo.getItem(combo.getSelectionIndex());
@@ -394,7 +419,6 @@ public class ApplicationWindow
 									while (iterator_parametros.hasNext())
 									{
 										Parametro parametro = (Parametro) iterator_parametros.next();
-										//Log.writeLogMessage(Log.DEBUG, "parametro.label = " + parametro.label);
 										logger.fine("parametro.label = " + parametro.label);
 										
 										Label aLabel = new Label(shell, SWT.SINGLE);
@@ -415,7 +439,6 @@ public class ApplicationWindow
 								
 								Combo elCombo = getCombo(itemSelected);
 								if(elCombo == null)
-									//Log.writeLogMessage(Log.ERROR, "No encontre el Combo, despues de reconstruir la pantalla");
 									logger.severe("No encontre el Combo, despues de reconstruir la pantalla");
 								
 								elCombo.setText(itemSelected);
@@ -452,21 +475,8 @@ public class ApplicationWindow
 				parametrosCargados.add(calendar);
 				continue;
 			}
-			
-			else if(parametro.inputType.equals(inputs.radioButton))
-			{
-				Text text = new Text(shell, SWT.SINGLE);
-				text.setLayoutData(gridData2);
-				
-				//Log.writeLogMessage(Log.ERROR, "Incorporar Widget para radioButton");
-				logger.severe("Incorporar Widget para radioButton");
-				
-				parametrosCargados.add(text);
-				continue;
-			}
 			else	//(parametro.inputType == null)
 			{
-				//Log.writeLogMessage(Log.ERROR, "No se reconoce el input o el input es NULL");
 				logger.severe("No se reconoce el input o el input es NULL");
 				continue;
 			}
