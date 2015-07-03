@@ -32,6 +32,7 @@ public class Consola
 			if (!display.readAndDispatch())
 				display.sleep();
 		}
+
 		display.dispose();
 		
 	}

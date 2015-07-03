@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <applications>
-	<application name="Copy files to a Folder using Copy" command="copy">
+	<application name="Copy a file to a Folder using Copy" command="copy">
 		<head>
 			<label>Application to Copy Files from a folder to another folder</label>
 		</head>
@@ -8,6 +8,24 @@
 			<label>Carpeta Origen</label>
 			<flag></flag>
 			<fileInput></fileInput>
+			<validation exists="true"></validation>
+		</parameter>
+		<parameter>
+			<label>Carpeta Destino</label>
+			<flag></flag>
+			<folderInput type="directory"></folderInput>
+			<validation exists="true" nullable="false"></validation>
+		</parameter>
+	</application>
+	
+	<application name="Copy files from a folder to another" command="xcopy">
+		<head>
+			<label>Application to Copy Files from a folder to another folder</label>
+		</head>
+		<parameter>
+			<label>Carpeta Origen</label>
+			<flag></flag>
+			<folderInput></folderInput>
 			<validation exists="true"></validation>
 		</parameter>
 		<parameter>
@@ -33,7 +51,7 @@
 						<item>
 							<label>Adapter (optional)</label>
 							<textBox></textBox>
-							<validation maxSize="50" nullable="false"></validation>
+							<validation maxSize="50" nullable="true"></validation>
 						</item>
 					</ifSelected>
 				</comboBoxItem>
@@ -75,5 +93,37 @@
 			</comboBox>
 		</parameter>
 	</application>
+	
+	<application name="git" exePath="C:\git\git.exe" command="">
+		<parameter>
+			<label></label>
+			<flag>commit</flag>
+			<validation></validation>
+		</parameter>
+		<parameter>
+			<label>Add all tracked Files</label>
+			<flag></flag>
+            <checkBox flag="-a"></checkBox>
+            <validation></validation>
+		</parameter>
+		<parameter>
+			<label>Commit Date</label>
+			<flag>--date=</flag>
+			<dateTimePicker format="yyyy-MM-dd"></dateTimePicker>
+			<validation></validation>
+		</parameter>
+		<parameter>
+			<label>Message</label>
+			<flag>-m</flag>
+			<textBox></textBox>
+			<validation maxSize="30" nullable="false"></validation>            
+		</parameter>
+		<parameter>
+			<label>Choose file:</label>
+			<flag></flag>
+			<fileInput type="file"></fileInput>
+			<validation nullable="true"></validation>
+		</parameter>
+    </application>
     
 </applications>

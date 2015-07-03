@@ -56,6 +56,8 @@ public class MainWindow
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		gridLayout.horizontalSpacing = SWT.CENTER;
+		gridLayout.marginHeight = 15;
+		gridLayout.marginWidth = 15;
 		shell.setLayout(gridLayout);
 		
 		// Este segmento se supone que centra el form a la pantalla
@@ -90,6 +92,7 @@ public class MainWindow
 		GridData gridData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
 		
 		combo.setLayoutData(gridData_combo);
+		
 		
 		Button executeButton = new Button(shell, SWT.PUSH); 
 		executeButton.setText("Execute");

@@ -68,6 +68,9 @@ public class ApplicationWindow
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 3;
 		gridLayout.makeColumnsEqualWidth = true;
+		gridLayout.horizontalSpacing = 15;
+		gridLayout.marginWidth = 15;
+		gridLayout.marginHeight = 15;
 
 		shell.setLayout(gridLayout);
 		
@@ -89,6 +92,10 @@ public class ApplicationWindow
 	    Label label = new Label(shell, SWT.SINGLE);
 		label.setText(actualApplication.description);
 		label.setLayoutData(gridData); 
+		//para dejar un espacio abajo del titulo
+		Label label2 = new Label(shell, SWT.SINGLE);
+		label2.setText("");
+		label2.setLayoutData(gridData); 
 	}
 	
 	public void addExecuteButton()
@@ -96,6 +103,11 @@ public class ApplicationWindow
 		GridData gridData_button = new GridData(GridData.END, GridData.CENTER, false, false);
 		gridData_button.horizontalSpan = 3;
 
+		//para dejar un espacio arriba del boton
+		Label label3 = new Label(shell, SWT.SINGLE);
+		label3.setText("");
+		label3.setLayoutData(gridData_button); 
+		
 		okBtn = new Button(shell, SWT.PUSH);
 		okBtn.setText("Execute");
 		okBtn.setLayoutData(gridData_button);
@@ -271,7 +283,6 @@ public class ApplicationWindow
 			{
 				Text text = new Text(shell, SWT.SINGLE);
 				text.setLayoutData(gridData2);
-				System.out.println("Incorporar Widget para fileInput");
 				parametrosCargados.add(text);
 				continue;
 			}

@@ -64,6 +64,7 @@ public class ExecuteButtonListener implements Listener
 				ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
 				ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
 				int index = parametroComboBox.getIndexOfItemSelected();
+
 				if(index == -1)
 				{
 					MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
