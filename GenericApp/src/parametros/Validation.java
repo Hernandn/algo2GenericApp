@@ -13,7 +13,7 @@ public class Validation
 	private int maxSize;
 	private boolean hasMaxSize = false;
 	
-	private boolean nullable;
+	private boolean nullable = false;
 	private boolean hasNullable = false;
 	
 	private boolean numeric;
@@ -60,7 +60,7 @@ public class Validation
 		this.hasMaxSize = true;
 	}
 	public boolean isNullable() {
-		return nullable;
+		return this.nullable;
 	}
 	public void setNullable(boolean nullable) {
 		this.nullable = nullable;

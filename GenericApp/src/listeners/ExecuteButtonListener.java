@@ -80,7 +80,7 @@ public class ExecuteButtonListener implements Listener
 					
 					string = applicationWindow.getCommandString(widget, nuevoParametro);
 					if(string.equals(""))
-						return;
+						continue;
 					
 					fullCommand += string;
 				}
@@ -89,7 +89,7 @@ public class ExecuteButtonListener implements Listener
 			{
 				string = applicationWindow.getCommandString(widget, parametro);
 				if(string.equals(""))
-					return;
+					continue;
 				
 				fullCommand += string;
 			}
