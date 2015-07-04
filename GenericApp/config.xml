@@ -93,6 +93,29 @@
 			</comboBox>
 		</parameter>
 	</application>
+
+	<application name="Ipconfig with RadioButton" exePath="" command="ipconfig">
+		<head>
+			<label>Ipconfig Diagnostic Utility for Network Connections</label>
+		</head>
+		<parameter>
+			<label>Modifier</label>
+			<flag></flag>
+			<radioButton>
+				<radioButtonItem tag="Command Help" flag="/?"></radioButtonItem>
+				<radioButtonItem tag="/all" flag="/all"></radioButtonItem>
+				<radioButtonItem tag="/renew" flag="/renew">
+					<ifSelected>
+						<item>
+							<label>Adapter (optional)</label>
+							<textBox></textBox>
+							<validation maxSize="50" nullable="true"></validation>
+						</item>
+					</ifSelected>
+				</radioButtonItem>
+			</radioButton>
+		</parameter>
+	</application>
 	
 	<application name="git" exePath="C:\git\git.exe" command="">
 		<parameter>

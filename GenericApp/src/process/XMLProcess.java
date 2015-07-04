@@ -215,30 +215,28 @@ public class XMLProcess
 		nodeList = element.getElementsByTagName("radioButton");
 		
 		if(nodeList != null && nodeList.getLength() > 0) 
-    {
-		  ParametroRadioButton parametro = new ParametroRadioButton(label, flag, inputs.radioButton, validation);
-      Element elemAux = (Element) nodeList.item(0); //obtengo el elemento <radioButton>
-      NodeList items = elemAux.getElementsByTagName("radioButtonItem");  //lista de <comboBoxItem>
-      for(int k=0 ; k < items.getLength() ; k++)
-      {
-        logger.fine("Entro en el for de radioButtonItem");
+		{
+			ParametroRadioButton parametro = new ParametroRadioButton(label, flag, inputs.radioButton, validation);
+			Element elemAux = (Element) nodeList.item(0); //obtengo el elemento <radioButton>
+			NodeList items = elemAux.getElementsByTagName("radioButtonItem");  //lista de <radioButtonItem>
+			for(int k=0 ; k < items.getLength() ; k++)
+			{
+				logger.fine("Entro en el for de radioButtonItem");
+				logger.fine("items.getLength() = " + items.getLength());
         
-        logger.fine("items.getLength() = " + items.getLength());
+				elemAux = (Element) items.item(k);      //cada <radioButtonItem> de la lista
+				String tag = elemAux.getAttribute("tag");
+				String flag2 = elemAux.getAttribute("flag");
         
-        elemAux = (Element) items.item(k);      //cada <radioButtonItem> de la lista
-        String tag = elemAux.getAttribute("tag");
-        String flag2 = elemAux.getAttribute("flag");
+				logger.fine("tag = " + tag);
+				logger.fine("flag = " + flag2);
         
-        logger.fine("tag = " + tag);
-        logger.fine("flag = " + flag2);
-        
-        RadioButtonItem radioButtonItem = new RadioButtonItem(tag, flag2);
-        //radioButtonItem.addSubParametros(listaSubparametrosIfSelected(elemAux)); //agrega todos los subparametros en <ifSelected>
-        
-        parametro.addRadioButtonItem(radioButtonItem);
-      }
-      return parametro;
-    }
+				RadioButtonItem radioButtonItem = new RadioButtonItem(tag, flag2);
+				radioButtonItem.addSubParametros(listaSubparametrosIfSelected(elemAux)); //agrega todos los subparametros en <ifSelected>        
+				parametro.addRadioButtonItem(radioButtonItem);
+			}
+			return parametro;
+		}
 		
 		nodeList = element.getElementsByTagName("dateTimePicker");
 		
@@ -263,7 +261,6 @@ public class XMLProcess
 		
 		return parametro;
 	}
-	
 	
 	public ArrayList<Parametro> listaSubparametrosIfSelected(Element elemAux)
 	{

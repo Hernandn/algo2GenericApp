@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
+import log.Log;
 import parametros.ComboBoxItem;
 import parametros.Parametro;
 import parametros.Parametro.inputs;
@@ -49,7 +50,6 @@ public class ExecuteButtonListener implements Listener
 			Parametro parametro = (Parametro) iterator_parametros.next();
 			
 			if(parametro.validation == null)
-			  
 				logger.info("Raro que no tenga ninguna validation");
 			
 			if(!parametro.tieneInput())
@@ -61,32 +61,36 @@ public class ExecuteButtonListener implements Listener
 			Widget widget = (Widget) iterator_widgets.next();
 			String string = "";
 			
-			if(parametro.inputType.equals(inputs.radioButton)) { //el parámetro es un radio button
+			if(parametro.inputType.equals(inputs.radioButton)) 
+			{ 
+				//el parámetro es un radio button
 			  
-			  //casteo a parámetro radio button
-			  ParametroRadioButton parametroRadioButton = (ParametroRadioButton) parametro;
+				//casteo a parámetro radio button
+				ParametroRadioButton parametroRadioButton = (ParametroRadioButton) parametro;
 			  
-			  //obtengo cantidad de opciones para iterar
-			  int itemsCount = parametroRadioButton.getRadioButtonItems().size();
+				// obtengo cantidad de opciones para iterar
+				int itemsCount = parametroRadioButton.getRadioButtonItems().size();
 			  
-			  //si el item está seleccionado entonces agrego el flag al comando
-			  if(((Button) widget).getSelection()) {
-          fullCommand += " " + ((Button) widget).getData(); 
-        }
+				//si el item está seleccionado entonces agrego el flag al comando
+				if(((Button) widget).getSelection()) 
+				{
+					fullCommand += " " + ((Button) widget).getData(); 
+				}
 			  
-			  for(int i = 0; i < itemsCount - 1; i++) {
-			    //paso al siguiente widget - IMPORTANTE: estoy pasando al próximo widget porque los radio button son widgets independientes 
-			      // - Hago esto para no romper la relación parámetro - widget
-			    widget = (Widget) iterator_widgets.next();
+				for(int i = 0; i < itemsCount - 1; i++) 
+				{
+					//paso al siguiente widget - IMPORTANTE: estoy pasando al próximo widget porque los radio button son widgets independientes 
+					// - Hago esto para no romper la relación parámetro - widget
+					widget = (Widget) iterator_widgets.next();
 			    
-			    //si el item está seleccionado entonces agrego el flag al comando
-			    if(((Button) widget).getSelection()) {
-			      fullCommand += " " + ((Button) widget).getData(); 
-			    }
-			  }
-			  
-			}else	if(parametro.inputType.equals(inputs.comboBox)) {
-			  
+					//si el item está seleccionado entonces agrego el flag al comando
+					if(((Button) widget).getSelection()) 
+					{
+						fullCommand += " " + ((Button) widget).getData(); 
+					}
+				}
+			} else if(parametro.inputType.equals(inputs.comboBox)) 
+			{
 				ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
 				ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
 				int index = parametroComboBox.getIndexOfItemSelected();
@@ -105,6 +109,7 @@ public class ExecuteButtonListener implements Listener
 					Parametro nuevoParametro = items.get(index).subParametros.get(i);
 					
 					string = applicationWindow.getCommandString(widget, nuevoParametro);
+					
 					if(string.equals(""))
 						continue;
 					
@@ -121,11 +126,10 @@ public class ExecuteButtonListener implements Listener
 			}
 		}
 		
-		//Log.writeLogMessage(Log.INFO, fullCommand);
 		logger.info("fullCommand: " + fullCommand);
-		
 		ApplicationWindow.shell.setVisible(false);
-		new Consola(ApplicationWindow.display, fullCommand);
+		//TODO: Descomentar - Comentado para probar en Ubuntu
+		//new Consola(ApplicationWindow.display, fullCommand);
 	}
 
 }
