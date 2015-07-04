@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class ParametroRadioButton extends Parametro
 {
 	private ArrayList<RadioButtonItem> radioButtonItems;
+	public int indexOfItemSelected;
 	
 	public ParametroRadioButton(String aLabel,String aFlag, inputs anInput, Validation aValidation)
 	{
