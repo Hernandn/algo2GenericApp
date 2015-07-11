@@ -43,6 +43,7 @@
 		<parameter>
 			<label>Modifier</label>
 			<flag></flag>
+			<validation nullable="false"></validation>
 			<comboBox>
 				<comboBoxItem tag="Command Help" flag="/?"></comboBoxItem>
 				<comboBoxItem tag="/all" flag="/all"></comboBoxItem>

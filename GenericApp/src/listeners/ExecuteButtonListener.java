@@ -15,6 +15,7 @@ import parametros.Parametro;
 import parametros.Parametro.inputs;
 import parametros.ParametroComboBox;
 import parametros.ParametroRadioButton;
+import parametros.RadioButtonItem;
 import process.ApplicationWindow;
 import process.Consola;
 import process.MessageBoxCustom;
@@ -67,7 +68,9 @@ public class ExecuteButtonListener implements Listener
 			  
 				//casteo a parámetro radio button
 				ParametroRadioButton parametroRadioButton = (ParametroRadioButton) parametro;
-			  
+				ArrayList<RadioButtonItem> items = parametroRadioButton.getRadioButtonItems();
+				
+				
 				// obtengo cantidad de opciones para iterar
 				int itemsCount = parametroRadioButton.getRadioButtonItems().size();
 			  
@@ -76,8 +79,10 @@ public class ExecuteButtonListener implements Listener
 				{
 					fullCommand += " " + ((Button) widget).getData(); 
 				}
+				
+				int i = 0;
 			  
-				for(int i = 0; i < itemsCount - 1; i++) 
+				for( ; i < itemsCount - 1; i++) 
 				{
 					//paso al siguiente widget - IMPORTANTE: estoy pasando al próximo widget porque los radio button son widgets independientes 
 					// - Hago esto para no romper la relación parámetro - widget
@@ -86,50 +91,70 @@ public class ExecuteButtonListener implements Listener
 					//si el item está seleccionado entonces agrego el flag al comando
 					if(((Button) widget).getSelection()) 
 					{
-						fullCommand += " " + ((Button) widget).getData(); 
+						fullCommand += " " + ((Button) widget).getData();
+						
+						// El que está seleccionado no es el i, es el i+1						
+						for(int j=0;j < items.get(i+1).subParametros.size() ; j++)
+						{
+							Parametro nuevoParametro = items.get(i+1).subParametros.get(j);
+							widget = (Widget) iterator_widgets.next();
+							string = applicationWindow.getCommandString(widget, nuevoParametro);
+							if(string.equals(""))
+								return;
+							
+							fullCommand += string;
+						}
 					}
 				}
-			} else if(parametro.inputType.equals(inputs.comboBox)) 
+				continue;
+			}
+			
+			if(parametro.inputType.equals(inputs.comboBox)) 
 			{
 				ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
-				ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
-				int index = parametroComboBox.getIndexOfItemSelected();
-
-				if(index == -1)
-				{
-					MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
-					messageBoxCustom.MessageBoxError("Por favor seleccione una de las opciones");
-					return;
-				}	
+				//Log.writeLogMessage(Log.ERROR, "1 - " + fullCommand);
 				
-				fullCommand += " " + items.get(index).getFlag();
-				for(int i=0;i < items.get(index).subParametros.size() ; i++)
+				if(parametroComboBox.selectedComboBoxItem != null)
+				{
+					fullCommand += " " + parametroComboBox.selectedComboBoxItem.getFlag();
+					//Log.writeLogMessage(Log.ERROR, "2.1 - " + fullCommand);
+				}
+				else
+				{
+					string = applicationWindow.getCommandString(widget, parametro);
+					if(string.equals(""))
+						return;
+					
+					fullCommand += " " + string;
+					//Log.writeLogMessage(Log.ERROR, "2.2 - " + fullCommand);
+				}
+				
+				for(int i=0; i < parametroComboBox.selectedComboBoxItem.subParametros.size(); i++)
 				{
 					widget = (Widget) iterator_widgets.next();
-					Parametro nuevoParametro = items.get(index).subParametros.get(i);
-					
+					Parametro nuevoParametro = parametroComboBox.selectedComboBoxItem.subParametros.get(i);					
 					string = applicationWindow.getCommandString(widget, nuevoParametro);
 					
 					if(string.equals(""))
-						continue;
+						return;
 					
 					fullCommand += string;
 				}
+				Log.writeLogMessage(Log.ERROR, "3 - " + fullCommand);
+				continue;
 			}
-			else
-			{
-				string = applicationWindow.getCommandString(widget, parametro);
-				if(string.equals(""))
-					continue;
+
+			string = applicationWindow.getCommandString(widget, parametro);
+			if(string.equals(""))
+				return;
 				
-				fullCommand += string;
-			}
+			fullCommand += string;
 		}
 		
 		logger.info("fullCommand: " + fullCommand);
 		ApplicationWindow.shell.setVisible(false);
 		//TODO: Descomentar - Comentado para probar en Ubuntu
-		//new Consola(ApplicationWindow.display, fullCommand);
+		new Consola(ApplicationWindow.display, fullCommand);
 	}
 
 }

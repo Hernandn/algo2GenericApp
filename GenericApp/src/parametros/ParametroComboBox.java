@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class ParametroComboBox extends Parametro
 {
 	private ArrayList<ComboBoxItem> comboBoxItems;
-	public int indexOfItemSelected;
+	public ComboBoxItem selectedComboBoxItem;
 	
 	public ParametroComboBox(String aLabel,String aFlag, inputs anInput, Validation aValidation)
 	{
 		super(aLabel, aFlag, anInput, aValidation);
 		comboBoxItems = new ArrayList<ComboBoxItem>();
-		indexOfItemSelected = -1;
+		selectedComboBoxItem = null;
 	}
 	
 	public void addComboBoxItem(ComboBoxItem cbItem)
@@ -28,30 +28,4 @@ public class ParametroComboBox extends Parametro
 	public void setComboBoxItems(ArrayList<ComboBoxItem> comboBoxItems) {
 		this.comboBoxItems = comboBoxItems;
 	}
-	/*
-	TODO: Borrar sino tira errores de compilacion
-	
-	public void setItemSelected(String item)
-	{
-		itemSelected = item;
-	}
-	
-	public String getItemSelected()
-	{
-		return itemSelected;
-	}
-	
-	*/
-	
-	public int getIndexOfItemSelected()
-	{
-		return indexOfItemSelected;
-	}
-	
-	public void setIndexOfItemSelected(int value)
-	{
-		indexOfItemSelected = value;
-	}
-	
-	
 }

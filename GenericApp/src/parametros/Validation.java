@@ -3,6 +3,8 @@ package parametros;
 import java.io.File;
 import java.util.logging.Logger;
 
+import log.Log;
+
 public class Validation
 {
 	private static final Logger logger = Logger.getLogger(Validation.class.getName());
@@ -83,6 +85,7 @@ public class Validation
 	
 	public boolean validateInput(String aString)
 	{
+
 		if(hasNumeric)
 		{
 			int num;
