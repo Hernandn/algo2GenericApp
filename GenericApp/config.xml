@@ -17,7 +17,23 @@
 			<validation exists="true" nullable="false"></validation>
 		</parameter>
 	</application>
-	
+	<application name="Copy a file to a Folder using Copy without Validation" command="copy">
+		<head>
+			<label>Application to Copy Files from a folder to another folder</label>
+		</head>
+		<parameter>
+			<label>Carpeta Origen</label>
+			<flag></flag>
+			<fileInput></fileInput>
+			<validation nullable="false"></validation>
+		</parameter>
+		<parameter>
+			<label>Carpeta Destino</label>
+			<flag></flag>
+			<folderInput type="directory"></folderInput>
+			<validation nullable="false"></validation>
+		</parameter>
+	</application>
 	<application name="Copy files from a folder to another" command="xcopy">
 		<head>
 			<label>Application to Copy Files from a folder to another folder</label>

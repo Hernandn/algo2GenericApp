@@ -79,8 +79,11 @@ public class Validation
 		return exists;
 	}
 	public void setExists(boolean exists) {
-		this.exists = exists;
-		this.hasExists = true;
+		if(exists)
+		{ 
+			this.exists = exists;
+			this.hasExists = true;
+		}
 	}
 	
 	public boolean validateInput(String aString)

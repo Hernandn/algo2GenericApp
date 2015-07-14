@@ -211,7 +211,7 @@ public class ApplicationWindow
 		return "";
 	}
 		
-	public Combo getCombo(String itemSelected)
+	public Combo _getCombo(String itemSelected)
 	{
 		Control[] children = shell.getChildren();
 		Combo combo = null;
@@ -259,7 +259,19 @@ public class ApplicationWindow
 			aLabel.setText(parametro.label);
 			aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
       	
-			final Text text = new Text(shell, SWT.PUSH);
+			int SWT_TYPE;
+			
+			if(parametro.validation != null && parametro.validation.hasExists())
+			{
+				SWT_TYPE = SWT.PUSH;
+			}
+			else
+			{				
+				SWT_TYPE = SWT.SINGLE;
+			}
+			
+			final Text text = new Text(shell, SWT_TYPE );
+			
 			GridData gridData3 = new GridData(GridData.FILL_HORIZONTAL);
 			gridData3.horizontalSpan = 2;
 			text.setLayoutData(gridData3);
@@ -299,8 +311,19 @@ public class ApplicationWindow
 			Label aLabel = new Label(shell, SWT.SINGLE);
 			aLabel.setText(parametro.label);
 			aLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-      	
-			final Text text = new Text(shell, SWT.PUSH);
+			
+			int SWT_TYPE;
+			
+			if(parametro.validation != null && parametro.validation.hasExists())
+			{
+				SWT_TYPE = SWT.PUSH;
+			}
+			else
+			{				
+				SWT_TYPE = SWT.SINGLE;
+			}
+			
+			final Text text = new Text(shell, SWT_TYPE );
 			GridData gridData3 = new GridData(GridData.FILL_HORIZONTAL);
 	        gridData3.horizontalSpan = 2;
 			text.setLayoutData(gridData3);
