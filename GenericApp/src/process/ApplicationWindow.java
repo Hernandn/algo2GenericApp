@@ -211,28 +211,6 @@ public class ApplicationWindow
 		return "";
 	}
 		
-	public Combo _getCombo(String itemSelected)
-	{
-		Control[] children = shell.getChildren();
-		Combo combo = null;
-	    for (int i = 0; i < children.length; i++) 
-	    {
-	      Control child = children[i];
-	      if(child instanceof Combo)
-	      {
-	    	  combo = (Combo) child;
-	    	  
-	    	  String[] items = combo.getItems();
-	    	  for(int j=0; j < items.length; j++)
-	    	  {
-	    		  if(items[j].equals(itemSelected))
-	    			  break;	    		
-	    	  }
-	      }
-	    }
-	    return combo;
-	}
-		
 	public void addParameter(Parametro parametro, GridData gridData)
 	{
 		final GridData gridData2 = gridData;
@@ -499,11 +477,12 @@ public class ApplicationWindow
 							public void focusGained(FocusEvent e) 
 							{
 								Log.writeLogMessage(Log.ERROR, "focusGained");
+						
 								parametroRadioButton.selectedRadioButtonItem = radioButtonItem;
 								Shell previousShell = shell;
 								initializeWindow();
 								addParameters();
-								
+							
 								Iterator<RadioButtonItem> iterator_items;
 								iterator_items = items.iterator();
 								while (iterator_items.hasNext())
@@ -513,7 +492,7 @@ public class ApplicationWindow
 									ArrayList<Parametro> subParametros = radioButtonItem.getSubParametros();
 									Iterator<Parametro> iterator_parametros;
 									iterator_parametros = subParametros.iterator();
-											
+										
 									while (iterator_parametros.hasNext())
 									{
 										Log.writeLogMessage(Log.ERROR, "Agregue un subparametro");
@@ -522,7 +501,7 @@ public class ApplicationWindow
 										addParameter(parametro, gridData2);
 									}
 								}
-								
+							
 								Button ExecuteButton = okBtn;
 								//GridData data = (GridData) ExecuteButton.getLayoutData();
 								ExecuteButton.dispose();
@@ -537,8 +516,40 @@ public class ApplicationWindow
 							public void focusLost(FocusEvent e) 
 							{
 								//No es necesario implementar, o si?
-								//Log.writeLogMessage(Log.ERROR, "focusLost");
+								Log.writeLogMessage(Log.ERROR, "focusLost");
 							}});
+					}
+					else
+					{
+						radioButtonComponent[i].addFocusListener(new FocusListener(){
+
+							@Override
+							public void focusGained(FocusEvent arg0) {
+								// TODO Auto-generated method stub
+								
+								parametroRadioButton.selectedRadioButtonItem = radioButtonItem;
+								Shell previousShell = shell;
+								
+								initializeWindow();
+								addParameters();
+								
+								Button ExecuteButton = okBtn;
+								//GridData data = (GridData) ExecuteButton.getLayoutData();
+								ExecuteButton.dispose();
+								addExecuteButton();
+								shell.layout(false);
+								shell.pack();
+								shell.open();
+								previousShell.dispose();
+								
+							}
+
+							@Override
+							public void focusLost(FocusEvent arg0) {
+								// TODO Auto-generated method stub
+								
+							}});
+						
 					}
 					parametrosCargados.add(radioButtonComponent[i]);
 					// Por que no se sumaba?
