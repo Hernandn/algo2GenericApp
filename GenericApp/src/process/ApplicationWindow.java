@@ -130,7 +130,7 @@ public class ApplicationWindow
 			
 			if( parametro.validation != null && !parametro.validation.validateInput(text))
 			{
-				logger.severe("Error de validación");
+				logger.severe("Error de validacion");
 				
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(shell, display);
 				messageBoxCustom.MessageBoxError("Error de Validacion en comboBox");
@@ -149,6 +149,7 @@ public class ApplicationWindow
 			{
 				return " " + parametro.flag;
 			}
+			
 			return "";
 		}
 		

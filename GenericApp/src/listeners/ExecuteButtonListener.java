@@ -1,5 +1,12 @@
 package listeners;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Logger;
@@ -77,7 +84,9 @@ public class ExecuteButtonListener implements Listener
 				//si el item estÃ¡ seleccionado entonces agrego el flag al comando
 				if(((Button) widget).getSelection()) 
 				{
-					fullCommand += " " + ((Button) widget).getData(); 
+					parametro.value = (String)((Button) widget).getData();
+					fullCommand += " " + ((Button) widget).getData();
+					
 				}
 				
 				int i = 0;
@@ -152,9 +161,90 @@ public class ExecuteButtonListener implements Listener
 		}
 		
 		logger.info("fullCommand: " + fullCommand);
+		
+		if(ApplicationWindow.actualApplication.GetCustomValidationClass() != null)
+		{
+			Class c = null;
+			Constructor<?> cons;
+			Object object;
+			Method method;
+			Boolean customValidated = false;
+			
+			
+			File f = new File("C:/Users/Cristhian/workspace/misValidaciones/bin/misValidaciones/");
+			//File f = new File("C:/Users/Cristhian/workspace/misValidaciones/bin/");
+			String myPackage = "misValidaciones";
+			String myClass = "miValidacion";
+
+			try 
+			{
+				URL[] cp = {f.toURI().toURL()};
+				URLClassLoader urlcl = new URLClassLoader(cp);
+				//Class clazz = urlcl.loadClass(myPackage + "." + myClass);
+				Class clazz = urlcl.loadClass(myClass);
+			} 
+			catch (MalformedURLException e2)
+			{	
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+				Log.writeLogMessage(Log.ERROR, "SOPA1");
+			}
+			catch (ClassNotFoundException e)
+			{
+				// TODO Auto-generated catch block
+				Log.writeLogMessage(Log.ERROR, "SOPA2");
+				e.printStackTrace();
+			}
+			
+			/*
+			try 
+			{
+				
+				c = Class.forName(ApplicationWindow.actualApplication.GetCustomValidationClass());
+				//cons = c.getConstructor(String.class);
+				//object = cons.newInstance();
+				//method = object.getClass().getMethod("Validate", null);
+				//customValidated = (Boolean) method.invoke(object, fullCommand);
+			} 
+			catch (ClassNotFoundException e1) 
+			{
+				e1.printStackTrace();
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
+				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Existe la clase?");
+			}
+			catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+			{
+				// TODO Auto-generated catch block
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
+				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Tiene constructor sin parametros?");
+				e.printStackTrace();
+			}
+			catch (NoSuchMethodException | SecurityException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
+				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Existe el método?");
+			}
+			*/
+			if(!customValidated)
+			{
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
+				messageBoxCustom.MessageBoxError("Error de CustomValidacion");
+			}
+			else
+			{
+				ApplicationWindow.shell.setVisible(false);
+				//TODO: Descomentar - Comentado para probar en Ubuntu
+				new Consola(ApplicationWindow.display, fullCommand);
+			}
+			return;
+		}
+
 		ApplicationWindow.shell.setVisible(false);
 		//TODO: Descomentar - Comentado para probar en Ubuntu
 		new Consola(ApplicationWindow.display, fullCommand);
+		
 	}
 
 }

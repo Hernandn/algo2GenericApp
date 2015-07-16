@@ -77,6 +77,7 @@ public class XMLProcess
 		Element element;
 		NodeList nodeList_Head;
 		NodeList nodeList_Parameters;
+		NodeList nodeList_customValidation;
 		NodeList nodeList_Aplication = document.getElementsByTagName("application");
 		
 		if(nodeList_Aplication == null)
@@ -128,6 +129,10 @@ public class XMLProcess
 
 			parsearParametros(nodeList_Parameters,app);
 			
+			nodeList_customValidation = element.getElementsByTagName("customValidation"); 
+			
+			parsearCustomValidation(nodeList_customValidation, app);
+			
 			aplicaciones.add(app);
 		}
 		
@@ -135,6 +140,25 @@ public class XMLProcess
 		
 	}
 	
+	private void parsearCustomValidation(NodeList nodeList_customValidation, Aplicacion app) 
+	{
+		Element element;
+		
+		try
+		{	
+			element = (Element)nodeList_customValidation.item(0);
+			String className = element.getAttribute("class");
+			String classPackage = element.getAttribute("package");
+			String classPath = element.getAttribute("path");
+			CustomValidationClass aCustomValidationClass = new CustomValidationClass(classPath, classPackage, className);
+			app.SetCustomValidationClass(aCustomValidationClass);
+		}
+		catch(NullPointerException e)
+		{
+			app.SetCustomValidationClass("");
+		}
+	}
+
 	private void parsearParametros(NodeList nodeList_Parameters, Aplicacion app)
 	{
 		Element element;
@@ -278,7 +302,6 @@ public class XMLProcess
 		}
 		return listaSubparametros;
 	}
-	
 	
 	private Validation getValidation(Element element)
 	{

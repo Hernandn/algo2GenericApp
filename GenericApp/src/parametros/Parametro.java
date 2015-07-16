@@ -18,6 +18,7 @@ public class Parametro
 	public String flag;
 	public inputs inputType;
 	public Validation validation;
+	public String value;
 	
 	public Parametro(String aLabel,String aFlag, inputs anInput, Validation aValidation)
 	{

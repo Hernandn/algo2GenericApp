@@ -11,11 +11,13 @@ public class Aplicacion
 	public String description;
 	public String exePath;
 	public String command;
+	public CustomValidationClass customValidationClass;
 	
 	public Aplicacion(String appName)
 	{
 		name = appName;
 		parametros = new ArrayList<Parametro>();
+		customValidationClass = null;
 	}
 	
 	public void SetExePath(String exepath)
@@ -36,6 +38,16 @@ public class Aplicacion
 	public void agregarParametro(Parametro parametro)
 	{
 		parametros.add(parametro);
+	}
+	
+	public void SetCustomValidationClass(CustomValidationClass aCustomValidationClass)
+	{
+		customValidationClass = aCustomValidationClass;
+	}
+	
+	public CustomValidationClass GetCustomValidationClass()
+	{
+		return customValidationClass;
 	}
 
 }

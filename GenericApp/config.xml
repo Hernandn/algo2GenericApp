@@ -16,7 +16,9 @@
 			<folderInput type="directory"></folderInput>
 			<validation exists="true" nullable="false"></validation>
 		</parameter>
+		<customValidation path="C:\Users\Cristhian\workspace\misValidaciones\bin" package="misValidaciones" class="miValidacion.class"></customValidation>
 	</application>
+
 	<application name="Copy a file to a Folder using Copy without Validation" command="copy">
 		<head>
 			<label>Application to Copy Files from a folder to another folder</label>
