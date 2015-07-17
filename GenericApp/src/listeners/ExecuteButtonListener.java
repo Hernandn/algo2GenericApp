@@ -1,6 +1,7 @@
 package listeners;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,7 +18,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
 import log.Log;
-import parametros.ComboBoxItem;
 import parametros.Parametro;
 import parametros.Parametro.inputs;
 import parametros.ParametroComboBox;
@@ -53,9 +53,12 @@ public class ExecuteButtonListener implements Listener
 		
 		Iterator<Widget> iterator_widgets = ApplicationWindow.parametrosCargados.iterator();
 		
+		Log.writeLogMessage(Log.ERROR, "1");
+		
 		while(iterator_parametros.hasNext())
 		{
 			Parametro parametro = (Parametro) iterator_parametros.next();
+			Log.writeLogMessage(Log.ERROR, "2");
 			
 			if(parametro.validation == null)
 				logger.info("Raro que no tenga ninguna validation");
@@ -72,7 +75,7 @@ public class ExecuteButtonListener implements Listener
 			if(parametro.inputType.equals(inputs.radioButton)) 
 			{ 
 				//el parÃ¡metro es un radio button
-			  
+				Log.writeLogMessage(Log.ERROR, "3");
 				//casteo a parÃ¡metro radio button
 				ParametroRadioButton parametroRadioButton = (ParametroRadioButton) parametro;
 				ArrayList<RadioButtonItem> items = parametroRadioButton.getRadioButtonItems();
@@ -121,12 +124,10 @@ public class ExecuteButtonListener implements Listener
 			if(parametro.inputType.equals(inputs.comboBox)) 
 			{
 				ParametroComboBox parametroComboBox = (ParametroComboBox) parametro;
-				//Log.writeLogMessage(Log.ERROR, "1 - " + fullCommand);
 				
 				if(parametroComboBox.selectedComboBoxItem != null)
 				{
 					fullCommand += " " + parametroComboBox.selectedComboBoxItem.getFlag();
-					//Log.writeLogMessage(Log.ERROR, "2.1 - " + fullCommand);
 				}
 				else
 				{
@@ -135,7 +136,6 @@ public class ExecuteButtonListener implements Listener
 						return;
 					
 					fullCommand += " " + string;
-					//Log.writeLogMessage(Log.ERROR, "2.2 - " + fullCommand);
 				}
 				
 				for(int i=0; i < parametroComboBox.selectedComboBoxItem.subParametros.size(); i++)
@@ -149,10 +149,9 @@ public class ExecuteButtonListener implements Listener
 					
 					fullCommand += string;
 				}
-				Log.writeLogMessage(Log.ERROR, "3 - " + fullCommand);
 				continue;
 			}
-
+			
 			string = applicationWindow.getCommandString(widget, parametro);
 			if(string.equals(""))
 				return;
@@ -164,85 +163,79 @@ public class ExecuteButtonListener implements Listener
 		
 		if(ApplicationWindow.actualApplication.GetCustomValidationClass() != null)
 		{
-			Class c = null;
-			Constructor<?> cons;
+			Class<?> myClass = null;
+			Constructor<?> constructor;
 			Object object;
 			Method method;
 			Boolean customValidated = false;
 			
-			
-			File f = new File("C:/Users/Cristhian/workspace/misValidaciones/bin/misValidaciones/");
-			//File f = new File("C:/Users/Cristhian/workspace/misValidaciones/bin/");
-			String myPackage = "misValidaciones";
-			String myClass = "miValidacion";
+			String classPath = ApplicationWindow.actualApplication.customValidationClass.path;
+			String classPackage = ApplicationWindow.actualApplication.customValidationClass.CustomPackage;
+			String className = ApplicationWindow.actualApplication.customValidationClass.ClassFile;
+
+			File file = new File(classPath.replace('\\','/'));
 
 			try 
 			{
-				URL[] cp = {f.toURI().toURL()};
-				URLClassLoader urlcl = new URLClassLoader(cp);
-				//Class clazz = urlcl.loadClass(myPackage + "." + myClass);
-				Class clazz = urlcl.loadClass(myClass);
+				URL[] urlClassPath = {file.toURI().toURL()};
+				URLClassLoader urlClassLoader = new URLClassLoader(urlClassPath);
+				myClass = urlClassLoader.loadClass(classPackage + "." + className.replace(".class", ""));
+				//constructor = myClass.getConstructor();
+				constructor = myClass.getConstructor();
+				object = constructor.newInstance();
+				method = object.getClass().getMethod("Validate", String.class);
+				customValidated = (Boolean) method.invoke(object, fullCommand);
+				urlClassLoader.close();
 			} 
 			catch (MalformedURLException e2)
 			{	
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
-				Log.writeLogMessage(Log.ERROR, "SOPA1");
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
+				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Esta bien la ruta del archivo .class en el XML?");
+				return;
 			}
 			catch (ClassNotFoundException e)
 			{
-				// TODO Auto-generated catch block
-				Log.writeLogMessage(Log.ERROR, "SOPA2");
 				e.printStackTrace();
-			}
-			
-			/*
-			try 
-			{
-				
-				c = Class.forName(ApplicationWindow.actualApplication.GetCustomValidationClass());
-				//cons = c.getConstructor(String.class);
-				//object = cons.newInstance();
-				//method = object.getClass().getMethod("Validate", null);
-				//customValidated = (Boolean) method.invoke(object, fullCommand);
-			} 
-			catch (ClassNotFoundException e1) 
-			{
-				e1.printStackTrace();
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
 				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Existe la clase?");
-			}
-			catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
-			{
-				// TODO Auto-generated catch block
-				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
-				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Tiene constructor sin parametros?");
-				e.printStackTrace();
+				return;
 			}
 			catch (NoSuchMethodException | SecurityException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
 				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Existe el método?");
+				return;
 			}
-			*/
+			catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+			{
+				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
+				messageBoxCustom.MessageBoxError("Error de CustomValidacion - ¿Tiene constructor sin parametros?");
+				e.printStackTrace();
+				return;
+			}
+			catch (IOException e)
+			{	
+				e.printStackTrace();
+				return;
+			}
+			
 			if(!customValidated)
 			{
 				MessageBoxCustom messageBoxCustom = new MessageBoxCustom(ApplicationWindow.shell, ApplicationWindow.display);
 				messageBoxCustom.MessageBoxError("Error de CustomValidacion");
+				return;
 			}
 			else
 			{
 				ApplicationWindow.shell.setVisible(false);
-				//TODO: Descomentar - Comentado para probar en Ubuntu
 				new Consola(ApplicationWindow.display, fullCommand);
+				return;
 			}
-			return;
 		}
-
+		
 		ApplicationWindow.shell.setVisible(false);
-		//TODO: Descomentar - Comentado para probar en Ubuntu
 		new Consola(ApplicationWindow.display, fullCommand);
 		
 	}

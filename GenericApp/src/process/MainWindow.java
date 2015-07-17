@@ -29,6 +29,8 @@ public class MainWindow
 	public ArrayList<Aplicacion> aplicaciones;
 	public Aplicacion applicationSelected;
 	
+	
+	
 	public MainWindow(ArrayList<Aplicacion> applications)
 	{
 		display = new Display();

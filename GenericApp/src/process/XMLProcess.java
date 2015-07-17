@@ -155,7 +155,7 @@ public class XMLProcess
 		}
 		catch(NullPointerException e)
 		{
-			app.SetCustomValidationClass("");
+			logger.fine("Application has not CustomValidation");
 		}
 	}
 

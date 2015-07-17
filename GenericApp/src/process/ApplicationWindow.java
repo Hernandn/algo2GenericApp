@@ -13,6 +13,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -101,7 +104,9 @@ public class ApplicationWindow
 		//para dejar un espacio abajo del titulo
 		Label label2 = new Label(shell, SWT.SINGLE);
 		label2.setText("");
-		label2.setLayoutData(gridData); 
+		label2.setLayoutData(gridData);
+		
+
 	}
 	
 	public void addExecuteButton()
@@ -150,7 +155,7 @@ public class ApplicationWindow
 				return " " + parametro.flag;
 			}
 			
-			return "";
+			return " ";
 		}
 		
 		if(parametro.inputType.equals(inputs.dateTimePicker))
@@ -365,7 +370,7 @@ public class ApplicationWindow
 			final ArrayList<ComboBoxItem> items = parametroComboBox.getComboBoxItems();
 			
 			if(items.isEmpty())
-				logger.severe("No se inicializco correctamente el parametroComboBox");
+				logger.severe("No se inicializo correctamente el parametroComboBox");
 				
 			Iterator<ComboBoxItem> iterator_items;
 			iterator_items = items.iterator();
@@ -443,6 +448,23 @@ public class ApplicationWindow
 		
 		if(parametro.inputType.equals(inputs.radioButton))
 		{
+			
+			//Este Key Listener està porque si hay un radioButton en el form, al presionar tab tira una excepcion de IsTabSelected
+			shell.addKeyListener(new KeyListener()
+			{
+				@Override
+				public void keyPressed(KeyEvent arg0) 
+				{
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void keyReleased(KeyEvent arg0) 
+				{
+					// TODO Auto-generated method stub
+				}});	
+			
+			Log.writeLogMessage(Log.ERROR, "radioButton");
 			final ParametroRadioButton parametroRadioButton = (ParametroRadioButton) parametro;
 
 			int itemsCount = parametroRadioButton.getRadioButtonItems().size();
@@ -464,26 +486,29 @@ public class ApplicationWindow
 					
 					if(parametroRadioButton.selectedRadioButtonItem != null)
 					{
+						Log.writeLogMessage(Log.ERROR, "Adentro del If");
 						if(parametroRadioButton.selectedRadioButtonItem.equals(radioButtonItem))
 						{
+							Log.writeLogMessage(Log.ERROR, "Mas Adentro del If");
 							radioButtonComponent[i].setSelection(true);
 						}
 					}
 					
-					if(radioButtonItem.subParametros.size() > 0)
+					radioButtonComponent[i].addFocusListener(new FocusListener()
 					{
-						radioButtonComponent[i].addFocusListener(new FocusListener()
+						@Override
+						public void focusGained(FocusEvent arg0) 
 						{
-							@Override
-							public void focusGained(FocusEvent e) 
-							{
-								Log.writeLogMessage(Log.ERROR, "focusGained");
-						
-								parametroRadioButton.selectedRadioButtonItem = radioButtonItem;
-								Shell previousShell = shell;
-								initializeWindow();
-								addParameters();
+							// TODO Auto-generated method stub
+							Log.writeLogMessage(Log.ERROR, "focusGained");
 							
+							parametroRadioButton.selectedRadioButtonItem = radioButtonItem;
+							Shell previousShell = shell;
+							initializeWindow();
+							addParameters();
+							
+							if(radioButtonItem.subParametros.size() > 0)
+							{
 								Iterator<RadioButtonItem> iterator_items;
 								iterator_items = items.iterator();
 								while (iterator_items.hasNext())
@@ -502,61 +527,37 @@ public class ApplicationWindow
 										addParameter(parametro, gridData2);
 									}
 								}
+							}
 							
-								Button ExecuteButton = okBtn;
-								//GridData data = (GridData) ExecuteButton.getLayoutData();
-								ExecuteButton.dispose();
-								addExecuteButton();
-								shell.layout(false);
-								shell.pack();
-								shell.open();
-								previousShell.dispose();
-							}
+							Button ExecuteButton = okBtn;
+							//GridData data = (GridData) ExecuteButton.getLayoutData();
+							ExecuteButton.dispose();
+							addExecuteButton();
+							shell.layout(false);
+							shell.pack();
+							shell.open();
+							previousShell.dispose();
+							
+						}
 
-							@Override
-							public void focusLost(FocusEvent e) 
-							{
-								//No es necesario implementar, o si?
-								Log.writeLogMessage(Log.ERROR, "focusLost");
-							}});
-					}
-					else
-					{
-						radioButtonComponent[i].addFocusListener(new FocusListener(){
-
-							@Override
-							public void focusGained(FocusEvent arg0) {
-								// TODO Auto-generated method stub
-								
-								parametroRadioButton.selectedRadioButtonItem = radioButtonItem;
-								Shell previousShell = shell;
-								
-								initializeWindow();
-								addParameters();
-								
-								Button ExecuteButton = okBtn;
-								//GridData data = (GridData) ExecuteButton.getLayoutData();
-								ExecuteButton.dispose();
-								addExecuteButton();
-								shell.layout(false);
-								shell.pack();
-								shell.open();
-								previousShell.dispose();
-								
-							}
-
-							@Override
-							public void focusLost(FocusEvent arg0) {
-								// TODO Auto-generated method stub
-								
-							}});
+						@Override
+						public void focusLost(FocusEvent arg0) {
+							// TODO Auto-generated method stub
+							Log.writeLogMessage(Log.ERROR, "focusLost = " + arg0.toString() );
+							return;
+						}
 						
-					}
+					});
+
+					//Log.writeLogMessage(Log.ERROR, "i antes = " + i);					
 					parametrosCargados.add(radioButtonComponent[i]);
+					Log.writeLogMessage(Log.ERROR, "i Despues = " + i);
 					// Por que no se sumaba?
 					i++;
 				} 
 			}
+
+			Log.writeLogMessage(Log.ERROR, "Retorne");
 			return;
 		}
 		
@@ -594,7 +595,7 @@ public class ApplicationWindow
 			addParameter(parametro, gridData);
 		}
 	}
-	
+			
 	public void showWindow()
 	{
 
@@ -608,7 +609,6 @@ public class ApplicationWindow
 		// Set up the event loop.
 		while (!shell.isDisposed())
 		{
-		
 			if (!display.readAndDispatch()) 
 			{
 				// If no more entries in event queue
@@ -619,5 +619,103 @@ public class ApplicationWindow
 		display.dispose();
 	}
 
+	public void _loadRadioButtonComponent(Parametro parametro, GridData gridData)
+	{
+		final GridData gridData2 = gridData;
+		Log.writeLogMessage(Log.ERROR, "radioButton");
+		final ParametroRadioButton parametroRadioButton = (ParametroRadioButton) parametro;
+
+		int itemsCount = parametroRadioButton.getRadioButtonItems().size();
+		int i = 0;
+
+		final Button[] radioButtonComponent; // = null;
+		
+		if(itemsCount > 0) 
+		{
+			radioButtonComponent = new Button[itemsCount];
+      
+			for(final RadioButtonItem radioButtonItem : parametroRadioButton.getRadioButtonItems()) 
+			{
+				
+				final ArrayList<RadioButtonItem> items = parametroRadioButton.getRadioButtonItems();
+				radioButtonComponent[i] = new Button(shell, SWT.RADIO);
+				radioButtonComponent[i].setText(radioButtonItem.getTag());
+				radioButtonComponent[i].setData(radioButtonItem.getFlag());
+				
+				if(parametroRadioButton.selectedRadioButtonItem != null)
+				{
+					Log.writeLogMessage(Log.ERROR, "Adentro del If");
+					if(parametroRadioButton.selectedRadioButtonItem.equals(radioButtonItem))
+					{
+						Log.writeLogMessage(Log.ERROR, "Mas Adentro del If");
+						radioButtonComponent[i].setSelection(true);
+					}
+				}
+					
+				
+				radioButtonComponent[i].addFocusListener(new FocusListener()
+				{
+					@Override
+					public void focusGained(FocusEvent arg0) 
+					{
+						// TODO Auto-generated method stub
+						Log.writeLogMessage(Log.ERROR, "focusGained");
+						
+						parametroRadioButton.selectedRadioButtonItem = radioButtonItem;
+						Shell previousShell = shell;
+						initializeWindow();
+						addParameters();
+						
+						if(radioButtonItem.subParametros.size() > 0)
+						{
+							Iterator<RadioButtonItem> iterator_items;
+							iterator_items = items.iterator();
+							while (iterator_items.hasNext())
+							{
+								Log.writeLogMessage(Log.ERROR, "Dentro del while iterator_items");
+								RadioButtonItem radioButtonItem = (RadioButtonItem) iterator_items.next();
+								ArrayList<Parametro> subParametros = radioButtonItem.getSubParametros();
+								Iterator<Parametro> iterator_parametros;
+								iterator_parametros = subParametros.iterator();
+									
+								while (iterator_parametros.hasNext())
+								{
+									Log.writeLogMessage(Log.ERROR, "Agregue un subparametro");
+									Parametro parametro = (Parametro) iterator_parametros.next();
+									logger.fine("parametro.label = " + parametro.label);
+									addParameter(parametro, gridData2);
+								}
+							}
+						}
+						
+						Button ExecuteButton = okBtn;
+						//GridData data = (GridData) ExecuteButton.getLayoutData();
+						ExecuteButton.dispose();
+						addExecuteButton();
+						shell.layout(false);
+						shell.pack();
+						shell.open();
+						previousShell.dispose();
+						
+					}
+
+					@Override
+					public void focusLost(FocusEvent arg0) {
+						// TODO Auto-generated method stub
+						Log.writeLogMessage(Log.ERROR, "focusLost = " + arg0.toString() );
+						return;
+					}
+					
+				});
+
+				//Log.writeLogMessage(Log.ERROR, "i antes = " + i);					
+				parametrosCargados.add(radioButtonComponent[i]);
+				Log.writeLogMessage(Log.ERROR, "i Despues = " + i);
+				// Por que no se sumaba?
+				i++;
+			} 
+		}
+	}
+	
 }
 

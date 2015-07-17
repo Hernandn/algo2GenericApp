@@ -16,7 +16,6 @@
 			<folderInput type="directory"></folderInput>
 			<validation exists="true" nullable="false"></validation>
 		</parameter>
-		<customValidation path="C:\Users\Cristhian\workspace\misValidaciones\bin" package="misValidaciones" class="miValidacion.class"></customValidation>
 	</application>
 
 	<application name="Copy a file to a Folder using Copy without Validation" command="copy">
@@ -64,8 +63,8 @@
 			<validation nullable="false"></validation>
 			<comboBox>
 				<comboBoxItem tag="Command Help" flag="/?"></comboBoxItem>
-				<comboBoxItem tag="/all" flag="/all"></comboBoxItem>
-				<comboBoxItem tag="/renew" flag="/renew">
+				<comboBoxItem tag="all" flag="/all"></comboBoxItem>
+				<comboBoxItem tag="renew" flag="/renew">
 					<ifSelected>
 						<item>
 							<label>Adapter (optional)</label>
@@ -122,8 +121,8 @@
 			<flag></flag>
 			<radioButton>
 				<radioButtonItem tag="Command Help" flag="/?"></radioButtonItem>
-				<radioButtonItem tag="/all" flag="/all"></radioButtonItem>
-				<radioButtonItem tag="/renew" flag="/renew">
+				<radioButtonItem tag="all" flag="/all"></radioButtonItem>
+				<radioButtonItem tag="renew" flag="/renew">
 					<ifSelected>
 						<item>
 							<label>Adapter (optional)</label>
@@ -135,58 +134,22 @@
 			</radioButton>
 		</parameter>
 	</application>
-	
-	<application name="git" exePath="C:\git\git.exe" command="">
-		<parameter>
-			<label></label>
-			<flag>commit</flag>
-			<validation></validation>
-		</parameter>
-		<parameter>
-			<label>Add all tracked Files</label>
-			<flag></flag>
-            <checkBox flag="-a"></checkBox>
-            <validation></validation>
-		</parameter>
-		<parameter>
-			<label>Commit Date</label>
-			<flag>--date=</flag>
-			<dateTimePicker format="yyyy-MM-dd"></dateTimePicker>
-			<validation></validation>
-		</parameter>
-		<parameter>
-			<label>Message</label>
-			<flag>-m</flag>
-			<textBox></textBox>
-			<validation maxSize="30" nullable="false"></validation>            
-		</parameter>
-		<parameter>
-			<label>Choose file:</label>
-			<flag></flag>
-			<fileInput type="file"></fileInput>
-			<validation nullable="true"></validation>
-		</parameter>
-    </application>
-    
-    <application name="ping" exePath="C:\Windows\System32\ping.exe" command="">
-    	
+    <application name="Ping Command" exePath="C:\Windows\System32\ping.exe" command="">
     	<head>
 			<label>ping</label>
 		</head>
-		
 		<parameter>
 			<label>IP</label>
 			<flag></flag>
 			<textBox></textBox>
+			<validation nullable="false"></validation>
 		</parameter>
-		
 		<parameter>
 			<label>Cant. de solicitudes</label>
 			<flag>-n</flag>
 			<textBox></textBox>
-			<validation numeric="true"></validation>
+			<validation numeric="true" nullable="false"></validation>
 		</parameter>
-		
 		<parameter>
 			<label>IP Standard</label>
 			<radioButton>
@@ -194,7 +157,28 @@
 				<radioButtonItem tag="IPv6" flag="-6"></radioButtonItem>
 			</radioButton>
 		</parameter>
-		
     </application>
-    
+    <application name="Ping with CheckBox" exePath="" command="ping">
+    	<head>
+			<label>ping con CheckBox</label>
+		</head>
+		<parameter>
+			<label>IP</label>
+			<flag></flag>
+			<textBox></textBox>
+		</parameter>
+		<parameter>
+			<label>IPv4</label>
+			<flag></flag>
+			<checkBox flag="-4"></checkBox>
+            <validation></validation>
+		</parameter>
+		<parameter>
+			<label>IPv6</label>
+			<flag></flag>
+			<checkBox flag="-6"></checkBox>
+            <validation></validation>
+		</parameter>
+		<customValidation path="C:\Users\Cristhian\workspace\misValidaciones\bin" package="misValidaciones" class="miValidacion.class"></customValidation>
+    </application>
 </applications>
